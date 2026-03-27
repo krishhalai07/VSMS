@@ -14,35 +14,44 @@
 </div>
 
 <div class="card-clean mb-5 p-0">
-    <!-- Rest of table omitted for brevity since layout handles it -->
-    <div class="table-responsive p-0">
+    <div class="table-responsive p-0" style="overflow-x: visible;">
         <table class="table table-hover table-custom mb-0 align-middle">
             <thead class="bg-light text-muted text-uppercase fw-bold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
                 <tr>
-                    <th class="ps-5 py-3 border-0">Job Ref</th>
-                    <th class="py-3 border-0">Client & Vehicle</th>
-                    <th class="py-3 border-0">Assigned Tech</th>
-                    <th class="py-3 border-0">Services Requested</th>
-                    <th class="py-3 border-0">Live Status</th>
+                    <th class="ps-5 py-3 border-0">J_id</th>
+                    <th class="py-3 border-0">Vech_id</th>
+                    <th class="py-3 border-0">Problem</th>
+                    <th class="py-3 border-0">Date_in</th>
+                    <th class="py-3 border-0">Date_out</th>
+                    <th class="py-3 border-0">Mech_Name</th>
+                    <th class="py-3 border-0">Status</th>
                     <th class="text-center pe-5 py-3 border-0">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Job Card 1 -->
                 <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">JC-1001</td>
-                    <td>
-                        <div class="d-flex flex-column">
-                            <span class="mb-1 fw-bold text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>John Doe</span>
-                            <span class="text-muted fw-bold"><i class="fa-solid fa-car-side me-2"></i>Toyota Camry (ABC-1234)</span>
-                        </div>
-                    </td>
+                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">1001</td>
+                    <td class="fw-bold">1</td>
+                    <td class="text-muted fw-medium">Standard Maintenance</td>
+                    <td class="text-muted">2026-03-25</td>
+                    <td class="text-muted">2026-03-26</td>
                     <td class="fw-medium text-dark"><i class="fa-solid fa-wrench me-2 text-primary"></i>David Miller</td>
-                    <td class="fw-medium text-muted">Standard Maintenance</td>
                     <td>
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 fw-bold d-inline-flex align-items-center">
-                            <span class="spinner-grow spinner-grow-sm me-2" style="width:0.5rem; height:0.5rem;"></span> IN PROGRESS
-                        </span>
+                        <div class="dropdown">
+                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-primary bg-opacity-10 text-primary dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 140px; border-radius: 8px;">
+                                In Progress
+                            </button>
+                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 140px; z-index: 1050;">
+                                <li><a class="dropdown-item fw-bold text-secondary rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Pending', 'secondary')">Pending</a></li>
+                                <li><a class="dropdown-item fw-bold text-info rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Assigned', 'info')">Assigned</a></li>
+                                <li><a class="dropdown-item fw-bold text-primary rounded bg-primary bg-opacity-10 mb-1" href="#" onclick="updateJobStatus(event, this, 'In Progress', 'primary')">In Progress</a></li>
+                                <li><a class="dropdown-item fw-bold text-warning rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Testing', 'warning')">Testing</a></li>
+                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Completed', 'success')">Completed</a></li>
+                                <li><a class="dropdown-item fw-bold text-dark rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Ready', 'dark')">Ready</a></li>
+                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover" href="#" onclick="updateJobStatus(event, this, 'Delivered', 'success')">Delivered</a></li>
+                            </ul>
+                        </div>
                     </td>
                     <td class="text-center pe-5">
                         <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#createJobModal" title="Edit Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
@@ -52,19 +61,27 @@
 
                 <!-- Job Card 2 -->
                 <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">JC-1002</td>
-                    <td>
-                        <div class="d-flex flex-column">
-                            <span class="mb-1 fw-bold text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>Jane Smith</span>
-                            <span class="text-muted fw-bold"><i class="fa-solid fa-car-side me-2"></i>Honda Civic (XYZ-9876)</span>
-                        </div>
-                    </td>
+                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">1002</td>
+                    <td class="fw-bold">2</td>
+                    <td class="text-muted fw-medium">Brake Pad Swap</td>
+                    <td class="text-muted">2026-03-26</td>
+                    <td class="text-muted">-</td>
                     <td class="fw-medium text-dark"><i class="fa-solid fa-wrench me-2 text-primary"></i>Sarah Jenkins</td>
-                    <td class="fw-medium text-muted">Brake Pad Swap</td>
                     <td>
-                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-bold d-inline-flex align-items-center">
-                            <i class="fa-solid fa-clock me-2"></i> PENDING PARTS
-                        </span>
+                        <div class="dropdown">
+                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-secondary bg-opacity-10 text-secondary dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 140px; border-radius: 8px;">
+                                Pending
+                            </button>
+                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 140px; z-index: 1050;">
+                                <li><a class="dropdown-item fw-bold text-secondary rounded bg-secondary bg-opacity-10 mb-1" href="#" onclick="updateJobStatus(event, this, 'Pending', 'secondary')">Pending</a></li>
+                                <li><a class="dropdown-item fw-bold text-info rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Assigned', 'info')">Assigned</a></li>
+                                <li><a class="dropdown-item fw-bold text-primary rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'In Progress', 'primary')">In Progress</a></li>
+                                <li><a class="dropdown-item fw-bold text-warning rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Testing', 'warning')">Testing</a></li>
+                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Completed', 'success')">Completed</a></li>
+                                <li><a class="dropdown-item fw-bold text-dark rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Ready', 'dark')">Ready</a></li>
+                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover" href="#" onclick="updateJobStatus(event, this, 'Delivered', 'success')">Delivered</a></li>
+                            </ul>
+                        </div>
                     </td>
                     <td class="text-center pe-5">
                         <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#createJobModal" title="Edit Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
@@ -74,19 +91,27 @@
 
                 <!-- Job Card 3 -->
                 <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">JC-1003</td>
-                    <td>
-                        <div class="d-flex flex-column">
-                            <span class="mb-1 fw-bold text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>Emily Davis</span>
-                            <span class="text-muted fw-bold"><i class="fa-solid fa-car-side me-2"></i>Tesla Model 3 (TSL-M3EV)</span>
-                        </div>
-                    </td>
+                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">1003</td>
+                    <td class="fw-bold">3</td>
+                    <td class="text-muted fw-medium">Diagnostics Scan</td>
+                    <td class="text-muted">2026-03-24</td>
+                    <td class="text-muted">2026-03-24</td>
                     <td class="fw-medium text-dark"><i class="fa-solid fa-wrench me-2 text-primary"></i>Marcus Vance</td>
-                    <td class="fw-medium text-muted">Diagnostics Scan</td>
                     <td>
-                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-bold d-inline-flex align-items-center">
-                            <i class="fa-solid fa-check-circle me-2"></i> COMPLETED
-                        </span>
+                        <div class="dropdown">
+                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-success bg-opacity-10 text-success dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 140px; border-radius: 8px;">
+                                Completed
+                            </button>
+                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 140px; z-index: 1050;">
+                                <li><a class="dropdown-item fw-bold text-secondary rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Pending', 'secondary')">Pending</a></li>
+                                <li><a class="dropdown-item fw-bold text-info rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Assigned', 'info')">Assigned</a></li>
+                                <li><a class="dropdown-item fw-bold text-primary rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'In Progress', 'primary')">In Progress</a></li>
+                                <li><a class="dropdown-item fw-bold text-warning rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Testing', 'warning')">Testing</a></li>
+                                <li><a class="dropdown-item fw-bold text-success rounded bg-success bg-opacity-10 mb-1" href="#" onclick="updateJobStatus(event, this, 'Completed', 'success')">Completed</a></li>
+                                <li><a class="dropdown-item fw-bold text-dark rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Ready', 'dark')">Ready</a></li>
+                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover" href="#" onclick="updateJobStatus(event, this, 'Delivered', 'success')">Delivered</a></li>
+                            </ul>
+                        </div>
                     </td>
                     <td class="text-center pe-5">
                         <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#createJobModal" title="Edit Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
@@ -168,8 +193,12 @@
                                 <label for="Status" class="custom-label"><i class="fa-solid fa-bars-progress text-warning"></i>Job Status</label>
                                 <select class="form-select fw-bold text-dark" id="Status" required>
                                     <option value="Pending" selected>Pending</option>
+                                    <option value="Assigned">Assigned</option>
                                     <option value="In Progress">In Progress</option>
+                                    <option value="Testing">Testing</option>
                                     <option value="Completed">Completed</option>
+                                    <option value="Ready">Ready</option>
+                                    <option value="Delivered">Delivered</option>
                                 </select>
                             </div>
                         </div>
@@ -184,10 +213,45 @@
     </div>
 </div>
 
-<style>
-    .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;}
-    .hover-lift:hover { background: white; transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-    .table-hover tbody tr:hover { background-color: #f8fafc; transform: scale(1.005); box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: all 0.2s; }
-    .transition-hover { transition: all 0.2s ease; }
-    .btn-check:checked + .btn-outline-primary { box-shadow: 0 4px 15px rgba(67, 56, 202, 0.3) !important; transform: translateY(-2px); }
-</style>
+    <style>
+        .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;}
+        .hover-lift:hover { background: white; transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .table-hover tbody tr:hover { background-color: #f8fbfd; transition: background-color 0.2s; }
+        .transition-hover { transition: all 0.15s ease-in-out; }
+        .btn-check:checked + .btn-outline-primary { box-shadow: 0 4px 15px rgba(67, 56, 202, 0.3) !important; transform: translateY(-2px); }
+        .custom-dropdown-btn::after { margin-left: auto; }
+        .transition-hover:hover { background-color: #f1f5f9; color: #0f172a !important; transform: translateX(2px); }
+    </style>
+
+@section Scripts {
+    <script>
+        function updateJobStatus(e, element, status, colorClass) {
+            e.preventDefault();
+            const btn = element.closest('.dropdown').querySelector('.dropdown-toggle');
+            const menuItems = element.closest('.dropdown-menu').querySelectorAll('.dropdown-item');
+            
+            // Revert all item classes
+            menuItems.forEach(item => {
+                let originalClasses = item.className;
+                item.className = originalClasses.replace(/bg-[a-z]+ bg-opacity-10/g, 'transition-hover');
+            });
+
+            // Set button appearance
+            btn.className = `btn btn-sm fw-bold border-0 shadow-sm bg-${colorClass} bg-opacity-10 text-${colorClass} dropdown-toggle d-flex justify-content-between align-items-center`;
+            btn.innerText = status;
+            
+            // Set newly clicked item appearance
+            element.className = element.className.replace('transition-hover', `bg-${colorClass} bg-opacity-10`);
+            
+            if (typeof showToast === 'function') {
+                showToast(`Job status updated to ${status}`, colorClass === 'danger' ? 'danger' : 'success');
+            }
+
+            // Automatically close the dropdown menu after selection
+            const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(btn);
+            if (dropdownInstance) {
+                dropdownInstance.hide();
+            }
+        }
+    </script>
+}

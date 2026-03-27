@@ -167,35 +167,69 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-2">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center" asp-controller="Customer" asp-action="Home">
-                    <i class="fa-solid fa-car-wrench me-2 text-primary"></i>
-                    AutoCare
+                <!-- Premium Logo Design -->
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Customer" asp-action="Home" style="gap: 12px;">
+                    <div class="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 45px; height: 45px;">
+                        <i class="fa-solid fa-car-wrench fs-4"></i>
+                    </div>
+                    <div>
+                        <span class="d-block fw-bold text-dark mb-0" style="line-height: 1.1; font-size: 1.3rem;">VSMS</span>
+                        <span class="d-block text-primary" style="font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px;">VEHICLE SERVICE</span>
+                    </div>
                 </a>
+                
                 <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Home" ? "active" : "")" asp-controller="Customer" asp-action="Home">Home</a>
+                        <li class="nav-item mx-1">
+                            <a class="nav-link px-3 py-2 rounded-pill fw-semibold @(ViewContext.RouteData.Values["Action"]?.ToString() == "Home" ? "bg-primary bg-opacity-10 text-primary" : "")" asp-controller="Customer" asp-action="Home">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "About" ? "active" : "")" asp-controller="Customer" asp-action="About">About</a>
+                        <li class="nav-item mx-1">
+                            <a class="nav-link px-3 py-2 rounded-pill fw-semibold @(ViewContext.RouteData.Values["Action"]?.ToString() == "About" ? "bg-primary bg-opacity-10 text-primary" : "")" asp-controller="Customer" asp-action="About">About</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "RequestService" ? "active" : "")" asp-controller="Customer" asp-action="RequestService">Request Service</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "MyRequests" ? "active" : "")" asp-controller="Customer" asp-action="MyRequests">My Requests</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")" asp-controller="Customer" asp-action="Profile">Profile</a>
+                        <li class="nav-item mx-1">
+                            <a class="nav-link px-3 py-2 rounded-pill fw-semibold @(ViewContext.RouteData.Values["Action"]?.ToString() == "RequestService" ? "bg-primary bg-opacity-10 text-primary" : "")" asp-controller="Customer" asp-action="RequestService">Request Service</a>
                         </li>
                     </ul>
-                    <div class="d-flex align-items-center mt-3 mt-lg-0">
-                        <a asp-controller="Customer" asp-action="Login" class="btn btn-outline-danger me-3 border-0 fw-semibold text-danger">Logout <i class="fa-solid fa-sign-out-alt ms-1"></i></a>
+                    
+                    <!-- Modern User Profile Dropdown Design -->
+                    <div class="d-flex align-items-center mt-3 mt-lg-0 border-start ps-lg-4 ms-lg-2">
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle px-2 py-1 rounded-pill bg-light border" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false" style="color: #1e293b; font-weight: 600; transition: all 0.3s ease;">
+                                <img src="https://randomuser.me/api/portraits/men/55.jpg" alt="User" width="36" height="36" class="rounded-circle me-2 object-fit-cover shadow-sm">
+                                <span class="me-1">John Doe</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-3" aria-labelledby="userMenu" style="border-radius: 12px; min-width: 220px; animation: slideIn 0.2s ease;">
+                                <li>
+                                    <div class="px-4 py-3 border-bottom mb-2 bg-light bg-opacity-50" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                                        <h6 class="mb-0 fw-bold text-dark">John Doe</h6>
+                                        <small class="text-muted" style="font-size: 0.8rem;">john.doe@example.com</small>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2 px-4 fw-medium" asp-controller="Customer" asp-action="Profile">
+                                        <i class="fa-solid fa-user-circle me-3 text-primary" style="width: 16px;"></i> My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2 px-4 fw-medium" asp-controller="Customer" asp-action="MyRequests">
+                                        <i class="fa-solid fa-list-check me-3 text-primary" style="width: 16px;"></i> My Requests
+                                        <span class="badge bg-danger rounded-pill float-end">2</span>
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider my-2"></li>
+                                <li>
+                                    <a class="dropdown-item py-2 px-4 text-danger fw-bold" asp-controller="Customer" asp-action="Login">
+                                        <i class="fa-solid fa-arrow-right-from-bracket me-3" style="width: 16px;"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
