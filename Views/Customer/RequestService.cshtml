@@ -1,0 +1,193 @@
+@{
+    ViewData["Title"] = "Request Service";
+    Layout = "_Layout";
+}
+
+<style>
+    .request-section {
+        padding: 50px 0;
+        background: linear-gradient(to bottom, #f8fafc, #ffffff);
+    }
+    
+    .form-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+    
+    .form-header {
+        background: var(--primary-color);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+    }
+    
+    .form-header::after {
+        content: '';
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 20px 20px 0;
+        border-style: solid;
+        border-color: var(--primary-color) transparent transparent transparent;
+    }
+    
+    .form-body {
+        padding: 40px;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 8px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 12px 15px;
+        border: 1px solid #cbd5e1;
+        transition: all 0.3s;
+        background-color: #f8fafc;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: white;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+    
+    .info-card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border-left: 5px solid var(--accent-color);
+    }
+    
+    .btn-submit {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+    
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        color: white;
+    }
+</style>
+
+<div class="request-section">
+    <div class="container">
+        <div class="row align-items-center mb-5" data-aos="fade-down">
+            <div class="col-12 text-center">
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2 fw-bold">Service Booking</span>
+                <h2 class="display-6 fw-bold">Schedule Your Service</h2>
+                <p class="text-muted">Fill out the form below and we'll take care of the rest.</p>
+            </div>
+        </div>
+
+        <div class="row g-5">
+            <!-- Form Column -->
+            <div class="col-lg-8" data-aos="fade-right">
+                <div class="form-card">
+                    <div class="form-header">
+                        <div class="fs-1 mb-2"><i class="fa-solid fa-clipboard-list"></i></div>
+                        <h3 class="fw-bold mb-0">Vehicle Details</h3>
+                        <p class="mb-0 text-white-50">Please provide accurate information for better service</p>
+                    </div>
+                    <div class="form-body">
+                        <form action="#" method="get">
+                            <!-- Customer Info -->
+                            <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-user me-2"></i>Personal Information</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">Customer Name</label>
+                                    <input type="text" class="form-control" placeholder="John Doe" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" placeholder="+1 (555) 000-0000" required>
+                                </div>
+                            </div>
+                            
+                            <hr class="text-muted my-4">
+
+                            <!-- Vehicle Info -->
+                            <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-car me-2"></i>Vehicle Information</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">Vehicle Name</label>
+                                    <input type="text" class="form-control" placeholder="e.g. Honda Civic" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Vehicle Model (Year)</label>
+                                    <input type="text" class="form-control" placeholder="e.g. 2021" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Registration Number</label>
+                                    <input type="text" class="form-control" placeholder="ABC-1234" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Preferred Date</label>
+                                    <input type="date" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Problem Description -->
+                            <div class="mb-5">
+                                <label class="form-label">Problem Description</label>
+                                <textarea class="form-control" rows="4" placeholder="Please describe the issue in detail..." required></textarea>
+                            </div>
+
+                            <button type="button" class="btn btn-submit w-100" onclick="alert('Service requested successfully!')">
+                                <i class="fa-solid fa-paper-plane me-2"></i> Submit Request
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Column -->
+            <div class="col-lg-4" data-aos="fade-left" data-aos-delay="200">
+                <div class="info-card mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div>
+                        <h5 class="fw-bold mb-3"><i class="fa-solid fa-circle-question text-accent me-2"></i>Need Help?</h5>
+                        <p class="text-muted mb-4">If you are unsure about the problem, just describe the symptoms (e.g., strange noise, vibrating steering wheel) and our expert mechanics will diagnose it.</p>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-3 d-flex align-items-center">
+                            <i class="fa-solid fa-phone text-primary me-3"></i>
+                            <span class="fw-semibold">+1 (555) 123-4567</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="fa-solid fa-envelope text-primary me-3"></i>
+                            <span class="fw-semibold">support@autocare.com</span>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+                
+                <div class="info-card" data-aos="fade-up" data-aos-delay="400" style="border-left-color: var(--primary-color);">
+                    <div>
+                        <h5 class="fw-bold mb-3"><i class="fa-solid fa-shield-halved text-primary me-2"></i>Our Guarantee</h5>
+                        <ul class="list-unstyled mb-0 text-muted">
+                        <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> 100% Genuine Parts</li>
+                        <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Transparent Pricing</li>
+                        <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Expert Mechanics</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Service Warranty</li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

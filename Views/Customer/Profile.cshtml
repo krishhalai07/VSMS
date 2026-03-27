@@ -1,0 +1,162 @@
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_Layout";
+}
+
+<style>
+    .profile-container {
+        padding: 60px 0;
+        background-color: var(--light-bg);
+    }
+    
+    .profile-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+        border: none;
+        overflow: hidden;
+    }
+    
+    .profile-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 40px 20px 80px;
+        text-align: center;
+        color: white;
+        position: relative;
+    }
+    
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        border: 5px solid white;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        object-fit: cover;
+        position: absolute;
+        bottom: -70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+    }
+    
+    .profile-body {
+        padding: 90px 40px 40px;
+        text-align: center;
+    }
+    
+    .info-group {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        background: #f8fafc;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        text-align: left;
+        border: 1px solid #e2e8f0;
+        transition: transform 0.2s;
+    }
+    
+    .info-group:hover {
+        transform: translateX(5px);
+        border-color: var(--primary-color);
+    }
+    
+    .info-icon {
+        width: 45px;
+        height: 45px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin-right: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    
+    .info-label {
+        font-size: 0.85rem;
+        color: #64748b;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+    
+    .info-value {
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0;
+    }
+    
+    .btn-edit {
+        background: white;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+        padding: 10px 30px;
+        border-radius: 30px;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+    
+    .btn-edit:hover {
+        background: var(--primary-color);
+        color: white;
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+    }
+</style>
+
+<div class="profile-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="profile-card tilt-element" data-aos="zoom-in" data-aos-duration="600" data-tilt data-tilt-max="5" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="profile-header tilt-inner" style="transform: translateZ(20px);">
+                        <h3 class="fw-bold mb-1">My Profile</h3>
+                        <p class="text-white-50 mb-0">Manage your personal information</p>
+                        <img src="https://randomuser.me/api/portraits/men/55.jpg" alt="Profile Picture" class="profile-avatar tilt-inner" style="transform: translateX(-50%) translateZ(80px);" />
+                    </div>
+                    
+                    <div class="profile-body tilt-inner" style="transform: translateZ(30px);">
+                        <h4 class="fw-bold text-dark mb-1">John Doe</h4>
+                        <p class="text-muted mb-4"><i class="fa-solid fa-location-dot me-1"></i> New York, USA</p>
+                        
+                        <div class="mt-4">
+                            <div class="info-group tilt-inner" data-aos="fade-up" data-aos-delay="100" style="transform: translateZ(20px);">
+                                <div class="info-icon"><i class="fa-solid fa-user"></i></div>
+                                <div>
+                                    <div class="info-label">Full Name</div>
+                                    <div class="info-value">John Doe</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-group tilt-inner" data-aos="fade-up" data-aos-delay="200" style="transform: translateZ(20px);">
+                                <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
+                                <div>
+                                    <div class="info-label">Email Address</div>
+                                    <div class="info-value">johndoe@example.com</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-group tilt-inner" data-aos="fade-up" data-aos-delay="300" style="transform: translateZ(20px);">
+                                <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+                                <div>
+                                    <div class="info-label">Phone Number</div>
+                                    <div class="info-value">+1 (555) 123-4567</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 tilt-inner" data-aos="fade-up" data-aos-delay="400" style="transform: translateZ(40px);">
+                            <button class="btn btn-edit me-2" onclick="alert('Edit Profile modal opening...')">
+                                <i class="fa-solid fa-pen-to-square me-2"></i>Edit Profile
+                            </button>
+                            <button class="btn btn-outline-danger shadow-sm rounded-pill px-4" onclick="alert('Password reset link sent!')">
+                                <i class="fa-solid fa-key me-2"></i>Reset Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

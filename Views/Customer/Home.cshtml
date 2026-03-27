@@ -1,0 +1,252 @@
+@{
+    ViewData["Title"] = "Home";
+    Layout = "_Layout";
+}
+
+<style>
+    /* Hero Section */
+    .hero-section {
+        position: relative;
+        background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
+        padding: 120px 0 80px;
+        overflow: hidden;
+    }
+
+    .hero-shape {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background: var(--primary-color);
+        clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+        z-index: 0;
+        opacity: 0.1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-img-container {
+        position: relative;
+        z-index: 1;
+        transform: perspective(1000px) rotateY(-15deg);
+        transition: transform 0.8s ease;
+    }
+    
+    .hero-img-container:hover {
+        transform: perspective(1000px) rotateY(0deg);
+    }
+
+    .hero-img {
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: 20px 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .stat-badge {
+        position: absolute;
+        bottom: 30px;
+        left: -30px;
+        background: white;
+        padding: 15px 25px;
+        border-radius: 12px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @@keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    /* Features Section */
+    .feature-card {
+        padding: 40px 30px;
+        text-align: center;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: #eff6ff;
+        color: var(--primary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 25px;
+        transition: all 0.4s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        background: var(--primary-color);
+        color: white;
+        transform: rotateY(180deg);
+    }
+
+    /* How it works */
+    .step-card {
+        text-align: center;
+        padding: 30px;
+        position: relative;
+    }
+
+    .step-number {
+        width: 60px;
+        height: 60px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 auto 20px;
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        border: 5px solid white;
+    }
+
+    .step-connector {
+        position: absolute;
+        top: 60px;
+        left: 50%;
+        width: 100%;
+        height: 2px;
+        background: dashed 2px #cbd5e1;
+        z-index: -1;
+    }
+
+    /* Testimonials */
+    .testimonial-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        margin: 15px 0;
+    }
+
+    .client-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-shape"></div>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0 hero-content" data-aos="fade-right">
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3 fw-bold">#1 Auto Service Center</span>
+                <h1 class="display-3 fw-bold mb-4" style="color: #0f172a;">Reliable Vehicle Service at <span class="text-primary">Your Doorstep</span></h1>
+                <p class="lead text-muted mb-5 pe-lg-5">Experience premium car care without leaving your home. Our expert mechanics provide top-notch service with transparent pricing.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-action="RequestService" class="btn btn-custom btn-lg"><i class="fa-solid fa-calendar-check me-2"></i> Book Service Now</a>
+                    <a asp-action="About" class="btn btn-outline-primary btn-lg bg-white fw-semibold">Learn More</a>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+                <div class="hero-img-container tilt-element" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.4">
+                    <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Car Servicing" class="hero-img tilt-inner" />
+                    <div class="stat-badge tilt-inner" style="transform: translateZ(80px);">
+                        <div class="fs-1 text-accent"><i class="fa-solid fa-star text-warning"></i></div>
+                        <div>
+                            <h4 class="mb-0 fw-bold">4.9/5</h4>
+                            <span class="text-muted small">From 2,000+ Reviews</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 my-5">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h6 class="text-primary fw-bold text-uppercase tracking-wide">Why Choose Us</h6>
+            <h2 class="display-6 fw-bold">Premium Services For Your Car</h2>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-card feature-card tilt-element" data-tilt data-tilt-scale="1.05">
+                    <div class="feature-icon tilt-inner">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3 tilt-inner" style="transform: translateZ(30px);">Easy Booking</h4>
+                    <p class="text-muted mb-0 tilt-inner" style="transform: translateZ(20px);">Book your service in just a few clicks. Choose your preferred date, time, and service type effortlessly.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card feature-card tilt-element" data-tilt data-tilt-scale="1.05">
+                    <div class="feature-icon tilt-inner">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3 tilt-inner" style="transform: translateZ(30px);">Expert Mechanics</h4>
+                    <p class="text-muted mb-0 tilt-inner" style="transform: translateZ(20px);">Our team consists of certified and experienced professionals who treat your car like their own.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="glass-card feature-card tilt-element" data-tilt data-tilt-scale="1.05">
+                    <div class="feature-icon tilt-inner">
+                        <i class="fa-solid fa-stopwatch"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3 tilt-inner" style="transform: translateZ(30px);">Fast Service</h4>
+                    <p class="text-muted mb-0 tilt-inner" style="transform: translateZ(20px);">We value your time. Get lightning-fast service delivery without compromising on quality.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container py-4">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h6 class="text-primary fw-bold text-uppercase tracking-wide">Process</h6>
+            <h2 class="display-6 fw-bold">How It Works</h2>
+        </div>
+        
+        <div class="row position-relative">
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="step-card tilt-element" data-tilt data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="step-number tilt-inner" style="transform: translateZ(60px);">1</div>
+                    <h4 class="fw-bold mb-3 tilt-inner" style="transform: translateZ(40px);">Request</h4>
+                    <p class="text-muted tilt-inner" style="transform: translateZ(20px);">Fill out a simple form detailing your vehicle issues and preferred schedule.</p>
+                </div>
+            </div>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="step-card tilt-element" data-tilt data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="step-number tilt-inner" style="transform: translateZ(60px);">2</div>
+                    <h4 class="fw-bold mb-3 tilt-inner" style="transform: translateZ(40px);">Service</h4>
+                    <p class="text-muted tilt-inner" style="transform: translateZ(20px);">Our expert mechanics inspect and repair your vehicle with absolute precision.</p>
+                </div>
+            </div>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="step-card tilt-element" data-tilt data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="step-number tilt-inner" style="transform: translateZ(60px);">3</div>
+                    <h4 class="fw-bold mb-3 tilt-inner" style="transform: translateZ(40px);">Delivery</h4>
+                    <p class="text-muted tilt-inner" style="transform: translateZ(20px);">Your vehicle is thoroughly tested, cleaned, and handed back to you in prime condition.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

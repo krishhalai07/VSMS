@@ -1,0 +1,143 @@
+@{
+    ViewData["Title"] = "About Us";
+    Layout = "_Layout";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover;
+        padding: 100px 0 60px;
+        color: white;
+        text-align: center;
+        margin-top: -80px; /* pull up under fixed navbar */
+        padding-top: 150px; /* add back space */
+        margin-bottom: 60px;
+    }
+
+    /* Simple Subtle Hover Animation */
+    .about-img {
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .about-img:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 40px rgba(0,0,0,0.15) !important;
+    }
+
+
+    .mission-card {
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        height: 100%;
+        border-top: 4px solid var(--primary-color);
+        transition: all 0.3s ease;
+    }
+
+    .mission-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 30px;
+        border-radius: 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="container" data-aos="fade-up">
+        <h1 class="display-4 fw-bold mb-3">About AutoCare</h1>
+        <p class="lead mb-0 text-white-50">Redefining Car Maintenance with Trust and Technology</p>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row align-items-center mb-5 pb-5">
+        <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+            <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="About AutoCare Mechanics" class="about-img img-fluid rounded-4 shadow-lg w-100" />
+        </div>
+        <div class="col-lg-6 ps-lg-5" data-aos="fade-left">
+            <h6 class="text-primary fw-bold text-uppercase tracking-wide">Who We Are</h6>
+            <h2 class="display-6 fw-bold mb-4">Your Trusted Vehicle Service Center</h2>
+            <p class="lead text-muted mb-4">We are a team of passionate automobile experts dedicated to providing hassle-free, transparent, and high-quality car maintenance services.</p>
+            <p class="text-muted mb-4">Founded with the vision to modernize the traditional garage experience, AutoCare brings professional mechanics, genuine parts, and advanced diagnostic tools right to your fingertips. Whether it's a routine checkup or a major repair, we ensure your vehicle gets the attention it deserves.</p>
+            
+            <ul class="list-unstyled mb-0">
+                <li class="mb-3 d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <span class="fw-semibold text-dark">10+ Years of Industry Experience</span>
+                </li>
+                <li class="mb-3 d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <span class="fw-semibold text-dark">Certified & Verified Mechanics</span>
+                </li>
+                <li class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-3">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <span class="fw-semibold text-dark">100% Genuine Spare Parts</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Mission & Vision -->
+    <div class="row g-4 mb-5 pb-5">
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="mission-card tilt-element" data-tilt data-tilt-max="10" data-tilt-scale="1.02">
+                <div class="text-primary fs-1 mb-4 tilt-inner" style="transform: translateZ(40px);"><i class="fa-solid fa-bullseye"></i></div>
+                <h3 class="fw-bold mb-3 tilt-inner" style="transform: translateZ(30px);">Our Mission</h3>
+                <p class="text-muted mb-0 tilt-inner" style="transform: translateZ(20px);">To empower vehicle owners with transparent, accessible, and highly reliable automotive care. We strive to build long-lasting relationships based on trust, quality workmanship, and exceptional customer service.</p>
+            </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="mission-card tilt-element" data-tilt data-tilt-max="10" data-tilt-scale="1.02" style="border-top-color: #f59e0b;">
+                <div class="text-warning fs-1 mb-4 tilt-inner" style="transform: translateZ(40px);"><i class="fa-solid fa-eye"></i></div>
+                <h3 class="fw-bold mb-3 tilt-inner" style="transform: translateZ(30px);">Our Vision</h3>
+                <p class="text-muted mb-0 tilt-inner" style="transform: translateZ(20px);">To become the industry standard for smart vehicle servicing worldwide, integrating cutting-edge tech with expert mechanics to make car maintenance completely effortless for everyone.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-4 mb-5">
+        <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="100">
+            <div class="stat-item tilt-element" data-tilt data-tilt-scale="1.1">
+                <div class="stat-number tilt-inner" style="transform: translateZ(30px);">5k+</div>
+                <div class="text-muted fw-semibold tilt-inner" style="transform: translateZ(20px);">Happy Customers</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="200">
+            <div class="stat-item tilt-element" data-tilt data-tilt-scale="1.1">
+                <div class="stat-number tilt-inner" style="transform: translateZ(30px);">12k+</div>
+                <div class="text-muted fw-semibold tilt-inner" style="transform: translateZ(20px);">Vehicles Serviced</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="300">
+            <div class="stat-item tilt-element" data-tilt data-tilt-scale="1.1">
+                <div class="stat-number tilt-inner" style="transform: translateZ(30px);">50+</div>
+                <div class="text-muted fw-semibold tilt-inner" style="transform: translateZ(20px);">Expert Mechanics</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3" data-aos="zoom-in" data-aos-delay="400">
+            <div class="stat-item tilt-element" data-tilt data-tilt-scale="1.1">
+                <div class="stat-number tilt-inner" style="transform: translateZ(30px);">24/7</div>
+                <div class="text-muted fw-semibold tilt-inner" style="transform: translateZ(20px);">Customer Support</div>
+            </div>
+        </div>
+    </div>
+</div>

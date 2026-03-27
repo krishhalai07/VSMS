@@ -1,0 +1,239 @@
+@{
+    ViewData["Title"] = "My Requests";
+    Layout = "_Layout";
+}
+
+<style>
+    .page-header {
+        background: url('https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover;
+        position: relative;
+        padding: 50px 0;
+        margin-top: -80px; 
+        padding-top: 130px; 
+        margin-bottom: 40px;
+    }
+
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(90deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.7) 100%);
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 1;
+        color: white;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        padding: 30px;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .custom-table th {
+        background-color: #f8fafc;
+        color: #475569;
+        font-weight: 600;
+        padding: 15px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .custom-table td {
+        padding: 18px 15px;
+        vertical-align: middle;
+        color: #1e293b;
+        font-weight: 500;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background-color 0.2s;
+    }
+
+    .custom-table tbody tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .status-pending {
+        background-color: rgba(245, 158, 11, 0.1);
+        color: #f59e0b; /* yellow/orange */
+    }
+
+    .status-progress {
+        background-color: rgba(37, 99, 235, 0.1);
+        color: #2563eb; /* blue */
+    }
+
+    .status-completed {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #10b981; /* green */
+    }
+
+    .status-delivered {
+        background-color: rgba(15, 23, 42, 0.1);
+        color: #0f172a; /* dark */
+    }
+    
+    .action-btn {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #f1f5f9;
+        color: #64748b;
+        transition: all 0.2s;
+        border: none;
+    }
+    
+    .action-btn:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: scale(1.1);
+    }
+</style>
+
+<div class="page-header">
+    <div class="container header-content" data-aos="fade-in">
+        <h2 class="display-6 fw-bold mb-2">My Service Requests</h2>
+        <p class="lead text-white-50 mb-0">Track the status of your vehicle service bookings</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="table-container tilt-element" data-aos="fade-up" data-aos-delay="100" data-tilt data-tilt-max="2" data-tilt-glare="true" data-tilt-max-glare="0.05">
+        <div class="tilt-inner" style="transform: translateZ(20px);">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-list-check me-2 text-primary"></i>Recent Requests</h4>
+            <a asp-action="RequestService" class="btn btn-outline-primary btn-sm fw-bold">
+                <i class="fa-solid fa-plus me-1"></i> New Booking
+            </a>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table custom-table mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Request ID</th>
+                        <th scope="col">Vehicle Details</th>
+                        <th scope="col">Problem / Service</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Preferred Date</th>
+                        <th scope="col" class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dummy Data 1 : Pending -->
+                    <tr data-aos="fade-up" data-aos-delay="200">
+                        <td><span class="text-primary fw-bold">#REQ-9012</span></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="fa-solid fa-car-side fa-lg"></i></div>
+                                <div>
+                                    <div class="fw-bold">Honda Civic</div>
+                                    <div class="small text-muted">2021 | ABC-1234</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Brake pad replacement and AC gas refill</span></td>
+                        <td>
+                            <span class="status-badge status-pending">
+                                <i class="fa-solid fa-clock"></i> Pending
+                            </span>
+                        </td>
+                        <td>@DateTime.Now.AddDays(2).ToString("dd MMM yyyy")</td>
+                        <td class="text-center">
+                            <button class="action-btn" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Dummy Data 2 : In Progress -->
+                    <tr data-aos="fade-up" data-aos-delay="300">
+                        <td><span class="text-primary fw-bold">#REQ-8945</span></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="fa-solid fa-car-side fa-lg"></i></div>
+                                <div>
+                                    <div class="fw-bold">Toyota Camry</div>
+                                    <div class="small text-muted">2019 | XYZ-9876</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Engine oil change, General Service</span></td>
+                        <td>
+                            <span class="status-badge status-progress">
+                                <i class="fa-solid fa-screwdriver-wrench"></i> In Progress
+                            </span>
+                        </td>
+                        <td>@DateTime.Now.ToString("dd MMM yyyy")</td>
+                        <td class="text-center">
+                            <button class="action-btn" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Dummy Data 3 : Completed -->
+                    <tr data-aos="fade-up" data-aos-delay="400">
+                        <td><span class="text-primary fw-bold">#REQ-8822</span></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="fa-solid fa-car-side fa-lg"></i></div>
+                                <div>
+                                    <div class="fw-bold">Ford Mustang</div>
+                                    <div class="small text-muted">2020 | DEF-4567</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Tire alignment and wheel balancing</span></td>
+                        <td>
+                            <span class="status-badge status-completed">
+                                <i class="fa-solid fa-circle-check"></i> Completed
+                            </span>
+                        </td>
+                        <td>@DateTime.Now.AddDays(-3).ToString("dd MMM yyyy")</td>
+                        <td class="text-center">
+                            <button class="action-btn" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Dummy Data 4 : Delivered -->
+                    <tr data-aos="fade-up" data-aos-delay="500">
+                        <td><span class="text-primary fw-bold">#REQ-8510</span></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="fa-solid fa-car-side fa-lg"></i></div>
+                                <div>
+                                    <div class="fw-bold">Tesla Model 3</div>
+                                    <div class="small text-muted">2022 | EV-0001</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Software update, Battery check</span></td>
+                        <td>
+                            <span class="status-badge status-delivered">
+                                <i class="fa-solid fa-flag-checkered"></i> Delivered
+                            </span>
+                        </td>
+                        <td>@DateTime.Now.AddDays(-15).ToString("dd MMM yyyy")</td>
+                        <td class="text-center">
+                            <button class="action-btn" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+</div>

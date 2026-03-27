@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Vehicle Service System</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #f59e0b;
+            --light-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #475569 !important;
+            margin: 0 5px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 24px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            margin-top: auto;
+        }
+
+        footer h5 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Common Card Styling */
+        .glass-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 3D Tilt Utilities */
+        .tilt-element {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .tilt-inner {
+            transform: translateZ(50px);
+            transition: transform 0.3s ease;
+        }
+
+        main {
+            padding-top: 80px; /* offset for fixed navbar */
+            padding-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Customer" asp-action="Home">
+                    <i class="fa-solid fa-car-wrench me-2 text-primary"></i>
+                    AutoCare
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Home" ? "active" : "")" asp-controller="Customer" asp-action="Home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "About" ? "active" : "")" asp-controller="Customer" asp-action="About">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "RequestService" ? "active" : "")" asp-controller="Customer" asp-action="RequestService">Request Service</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "MyRequests" ? "active" : "")" asp-controller="Customer" asp-action="MyRequests">My Requests</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")" asp-controller="Customer" asp-action="Profile">Profile</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center mt-3 mt-lg-0">
+                        <a asp-controller="Customer" asp-action="Login" class="btn btn-outline-danger me-3 border-0 fw-semibold text-danger">Logout <i class="fa-solid fa-sign-out-alt ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <footer class="pt-5 pb-3">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <h5 class="text-white d-flex align-items-center">
+                        <i class="fa-solid fa-car-wrench me-2 text-primary"></i> AutoCare
+                    </h5>
+                    <p class="mt-3">Your trusted partner for all vehicle service and maintenance needs. We provide reliable, transparent, and high-quality services right at your doorstep.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 footer-links" data-aos="fade-up" data-aos-delay="200">
+                    <h5>Quick Links</h5>
+                    <a asp-controller="Customer" asp-action="Home">Home</a>
+                    <a asp-controller="Customer" asp-action="About">About Us</a>
+                    <a asp-controller="Customer" asp-action="RequestService">Book Service</a>
+                    <a asp-controller="Customer" asp-action="MyRequests">Track Order</a>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 footer-links" data-aos="fade-up" data-aos-delay="300">
+                    <h5>Our Services</h5>
+                    <a href="#">General Service</a>
+                    <a href="#">Engine Repair</a>
+                    <a href="#">Car Wash & Polish</a>
+                    <a href="#">AC Repair</a>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled mt-3">
+                        <li class="mb-3 d-flex">
+                            <i class="fa-solid fa-location-dot mt-1 me-3 text-primary"></i>
+                            <span>123 Auto Street, Motor City, VS 10001</span>
+                        </li>
+                        <li class="mb-3 d-flex">
+                            <i class="fa-solid fa-phone mt-1 me-3 text-primary"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li class="mb-3 d-flex">
+                            <i class="fa-solid fa-envelope mt-1 me-3 text-primary"></i>
+                            <span>support@autocare.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="border-secondary mt-4 mb-4" />
+            <div class="row text-center">
+                <div class="col-12" data-aos="fade-up">
+                    <p class="mb-0">&copy; @DateTime.Now.Year AutoCare Vehicle Service System. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Library for Animations -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Vanilla Tilt for 3D Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize AOS
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 50
+            });
+            
+            // Navbar scroll effect
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    $('.navbar').css('box-shadow', '0 10px 30px -10px rgba(0,0,0,0.1)');
+                } else {
+                    $('.navbar').css('box-shadow', '0 4px 6px -1px rgba(0, 0, 0, 0.05)');
+                }
+            });
+
+            // Initialize Vanilla Tilt
+            VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+                max: 15,
+                speed: 400,
+                glare: true,
+                "max-glare": 0.2,
+                scale: 1.02
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
