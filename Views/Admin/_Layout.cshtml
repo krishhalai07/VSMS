@@ -308,9 +308,7 @@
             <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "JobCards" ? "active" : "")">
                 <a href="@Url.Action("JobCards", "Admin")" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> Job Cards</a>
             </li>
-            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "ServiceManagement" ? "active" : "")">
-                <a href="@Url.Action("ServiceManagement", "Admin")" class="nav-link"><i class="fa-solid fa-gears"></i> Services</a>
-            </li>
+
             <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "Billing" ? "active" : "")">
                 <a href="@Url.Action("Billing", "Admin")" class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
             </li>
@@ -419,6 +417,28 @@
     <style>
         .dropdown-item:hover { background: #f1f5f9; color: var(--primary) !important; transform: translateX(5px); transition: all 0.2s; }
     </style>
+
+    <!-- Global Client-Side Search Filter -->
+    <script>
+        $(document).ready(function() {
+            $('input[placeholder^="Search"]').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                
+                // Filter all table rows (Customers, Vehicles, Job Cards, Billing)
+                $('table tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+                
+                // Filter all List Cards (Mechanics, Services)
+                $('div[class*="col-12 col-md-6"]').filter(function() {
+                    // Only filter cols that contain a card but NOT a form (to avoid filtering layout)
+                    if($(this).find('.card-clean').length > 0 && $(this).find('form').length === 0) {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    }
+                });
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

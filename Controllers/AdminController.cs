@@ -47,10 +47,6 @@ namespace VSMS.Controllers
             return View();
         }
 
-        public IActionResult ServiceManagement()
-        {
-            return View();
-        }
 
         public IActionResult Billing()
         {

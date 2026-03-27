@@ -114,41 +114,63 @@
             <div class="modal-body p-4 pt-4">
                 <form>
                     <div class="row g-4">
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
+                        <!-- J_id -->
+                        <div class="col-md-4" style="animation: slideUpFade 0.4s both 0.1s;">
                             <div>
-                                <label for="jobVehicle" class="custom-label"><i class="fa-solid fa-car"></i>Target Vehicle</label>
-                                <select class="form-select fw-bold text-dark" id="jobVehicle" required>
-                                    <option value="" selected disabled>Select Vehicle...</option>
-                                    <option value="1">Toyota Camry (ABC-1234)</option>
+                                <label for="J_id" class="custom-label"><i class="fa-solid fa-hashtag"></i>Job ID (J_id)</label>
+                                <input type="number" class="form-control bg-light" id="J_id" placeholder="Auto" readonly>
+                            </div>
+                        </div>
+
+                        <!-- Vech_id -->
+                        <div class="col-md-8" style="animation: slideUpFade 0.4s both 0.1s;">
+                            <div>
+                                <label for="Vech_id" class="custom-label"><i class="fa-solid fa-car"></i>Vehicle ID (Vech_id)</label>
+                                <select class="form-select fw-bold text-dark" id="Vech_id" required>
+                                    <option value="" selected disabled>Select assigned vehicle...</option>
+                                    <option value="1">1 - Toyota Camry (ABC-1234)</option>
+                                    <option value="2">2 - Honda Civic (XYZ-9876)</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
+
+                        <!-- Problem -->
+                        <div class="col-12" style="animation: slideUpFade 0.4s both 0.2s;">
                             <div>
-                                <label for="jobMech" class="custom-label"><i class="fa-solid fa-wrench"></i>Assigned Technician</label>
-                                <select class="form-select fw-bold text-dark" id="jobMech" required>
-                                    <option value="" selected disabled>Unassigned...</option>
-                                    <option value="1">David Miller</option>
+                                <label for="Problem" class="custom-label"><i class="fa-solid fa-triangle-exclamation text-danger"></i>Problem Description</label>
+                                <input type="text" class="form-control" id="Problem" placeholder="Brief issue description (max 50 chars)" maxlength="50" required>
+                            </div>
+                        </div>
+
+                        <!-- Date_in & Date_out -->
+                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
+                            <div>
+                                <label for="Date_in" class="custom-label"><i class="fa-regular fa-calendar-plus text-primary"></i>Date In</label>
+                                <input type="date" class="form-control text-muted fw-bold" id="Date_in" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
+                            <div>
+                                <label for="Date_out" class="custom-label"><i class="fa-regular fa-calendar-check text-success"></i>Date Out</label>
+                                <input type="date" class="form-control text-muted fw-bold" id="Date_out">
+                            </div>
+                        </div>
+
+                        <!-- Mech_Name & Status -->
+                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.4s;">
+                            <div>
+                                <label for="Mech_Name" class="custom-label"><i class="fa-solid fa-user-gear"></i>Mechanic Name</label>
+                                <input type="text" class="form-control" id="Mech_Name" placeholder="e.g. David Miller" maxlength="50" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.4s;">
+                            <div>
+                                <label for="Status" class="custom-label"><i class="fa-solid fa-bars-progress text-warning"></i>Job Status</label>
+                                <select class="form-select fw-bold text-dark" id="Status" required>
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="col-12" style="animation: slideUpFade 0.4s both 0.3s;">
-                            <label class="custom-label mb-3 d-block"><i class="fa-solid fa-list-check"></i>Required Services</label>
-                            <div class="d-flex gap-3 flex-wrap">
-                                <div class="form-check p-0">
-                                    <input type="checkbox" class="btn-check" id="chkOil" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary border-2 fw-bold text-sm px-4 rounded-pill transition-hover" for="chkOil">Oil Change</label>
-                                </div>
-                                <div class="form-check p-0">
-                                    <input type="checkbox" class="btn-check" id="chkDiag" autocomplete="off">
-                                    <label class="btn btn-outline-primary border-2 fw-bold text-sm px-4 rounded-pill transition-hover" for="chkDiag">Diagnostics</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 mt-4" style="animation: slideUpFade 0.4s both 0.4s;">
-                            <div>
-                                <label for="jobNotes" class="custom-label"><i class="fa-solid fa-note-sticky"></i>Additional Instructions</label>
-                                <textarea class="form-control" id="jobNotes" placeholder="Mechanic notes here..." style="height: 100px;"></textarea>
                             </div>
                         </div>
                     </div>
