@@ -338,13 +338,22 @@
                     <ul class="dropdown-menu dropdown-menu-end mt-2 p-2 shadow border-0 rounded-4" style="min-width: 200px; animation: slideUpFade 0.3s ease;">
                         <li><a class="dropdown-item py-2 rounded mb-1 fw-bold" href="@Url.Action("Profile", "Admin")"><i class="fa-solid fa-user me-2 text-primary"></i> My Profile</a></li>
                         <li><hr class="dropdown-divider opacity-10"></li>
-                        <li><a class="dropdown-item text-danger fw-bold rounded py-2" href="/Admin/Login"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Sign Out</a></li>
+                        <li><a class="dropdown-item text-danger fw-bold rounded py-2" href="/Auth/Logout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Sign Out</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
 
         <div class="container-fluid p-4" style="max-width: 1600px; position: relative;">
+            @if (ViewBag.DbError != null)
+            {
+                <div class="alert alert-danger rounded-3 mb-4">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <strong>Database Error:</strong> @ViewBag.DbError
+                    <hr class="my-2">
+                    <small>Make sure all required tables exist in your VSMS database. Run the SQL scripts in SSMS if needed.</small>
+                </div>
+            }
             @RenderBody()
         </div>
     </div>

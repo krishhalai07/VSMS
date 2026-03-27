@@ -1,239 +1,310 @@
+@model List<VSMS.Models.JobCard>
 @{
     ViewData["Title"] = "My Requests";
-    Layout = "_Layout";
+    Layout = "~/Views/Customer/_Layout.cshtml";
+    var vehicles = ViewBag.Vehicles as List<VSMS.Models.Vehicle> ?? new();
+
+    // Progress steps order
+    var steps = new[] { "Pending", "Assigned", "In Progress", "Testing", "Completed", "Delivered" };
 }
 
-<style>
-    .page-header {
-        background: url('https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover;
-        position: relative;
-        padding: 50px 0;
-        margin-top: -80px; 
-        padding-top: 130px; 
-        margin-bottom: 40px;
-    }
+<div class="container py-5">
 
-    .page-header::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: linear-gradient(90deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.7) 100%);
-    }
-
-    .header-content {
-        position: relative;
-        z-index: 1;
-        color: white;
-    }
-
-    .table-container {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-        padding: 30px;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .custom-table th {
-        background-color: #f8fafc;
-        color: #475569;
-        font-weight: 600;
-        padding: 15px;
-        border-bottom: 2px solid #e2e8f0;
-    }
-
-    .custom-table td {
-        padding: 18px 15px;
-        vertical-align: middle;
-        color: #1e293b;
-        font-weight: 500;
-        border-bottom: 1px solid #f1f5f9;
-        transition: background-color 0.2s;
-    }
-
-    .custom-table tbody tr:hover td {
-        background-color: #f8fafc;
-    }
-
-    /* Status Badges */
-    .status-badge {
-        padding: 8px 16px;
-        border-radius: 30px;
-        font-weight: 600;
-        font-size: 0.85rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .status-pending {
-        background-color: rgba(245, 158, 11, 0.1);
-        color: #f59e0b; /* yellow/orange */
-    }
-
-    .status-progress {
-        background-color: rgba(37, 99, 235, 0.1);
-        color: #2563eb; /* blue */
-    }
-
-    .status-completed {
-        background-color: rgba(16, 185, 129, 0.1);
-        color: #10b981; /* green */
-    }
-
-    .status-delivered {
-        background-color: rgba(15, 23, 42, 0.1);
-        color: #0f172a; /* dark */
-    }
-    
-    .action-btn {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: #f1f5f9;
-        color: #64748b;
-        transition: all 0.2s;
-        border: none;
-    }
-    
-    .action-btn:hover {
-        background: var(--primary-color);
-        color: white;
-        transform: scale(1.1);
-    }
-</style>
-
-<div class="page-header">
-    <div class="container header-content" data-aos="fade-in">
-        <h2 class="display-6 fw-bold mb-2">My Service Requests</h2>
-        <p class="lead text-white-50 mb-0">Track the status of your vehicle service bookings</p>
-    </div>
-</div>
-
-<div class="container mb-5">
-    <div class="table-container tilt-element" data-aos="fade-up" data-aos-delay="100" data-tilt data-tilt-max="2" data-tilt-glare="true" data-tilt-max-glare="0.05">
-        <div class="tilt-inner" style="transform: translateZ(20px);">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-list-check me-2 text-primary"></i>Recent Requests</h4>
-            <a asp-action="RequestService" class="btn btn-outline-primary btn-sm fw-bold">
-                <i class="fa-solid fa-plus me-1"></i> New Booking
-            </a>
+    <div class="d-flex justify-content-between align-items-center mb-5" data-aos="fade-down">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">My Service Requests</h2>
+            <p class="text-muted mb-0">Track your vehicle submissions and service job status</p>
         </div>
-        
+        <a href="/Customer/RequestService" class="btn btn-custom fw-bold px-4">
+            <i class="fa-solid fa-plus me-2"></i>New Request
+        </a>
+    </div>
+
+    <!-- ── VEHICLE SUBMISSIONS ──────────────────────────── -->
+    <div class="d-flex align-items-center mb-3" data-aos="fade-up">
+        <div class="p-2 bg-primary bg-opacity-10 text-primary rounded me-3">
+            <i class="fa-solid fa-car-side"></i>
+        </div>
+        <h5 class="fw-bold text-dark mb-0">My Vehicle Submissions</h5>
+        <span class="badge bg-primary bg-opacity-10 text-primary ms-2 rounded-pill">@vehicles.Count</span>
+    </div>
+
+    <div class="glass-card p-0 mb-5" data-aos="fade-up">
         <div class="table-responsive">
-            <table class="table custom-table mb-0">
-                <thead>
-                    <tr>
-                        <th scope="col">Request ID</th>
-                        <th scope="col">Vehicle Details</th>
-                        <th scope="col">Problem / Service</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Preferred Date</th>
-                        <th scope="col" class="text-center">Action</th>
+            <table class="table table-hover mb-0 align-middle">
+                <thead style="background:#f8fafc;">
+                    <tr class="text-muted text-uppercase fw-bold" style="font-size:0.75rem;letter-spacing:0.5px;">
+                        <th class="ps-4 py-3 border-0">V_ID</th>
+                        <th class="py-3 border-0">Number Plate</th>
+                        <th class="py-3 border-0">Car</th>
+                        <th class="py-3 border-0">Model</th>
+                        <th class="py-3 border-0">Year</th>
+                        <th class="py-3 border-0">Contact</th>
+                        <th class="py-3 border-0">Approval Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dummy Data 1 : Pending -->
-                    <tr data-aos="fade-up" data-aos-delay="200">
-                        <td><span class="text-primary fw-bold">#REQ-9012</span></td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="fa-solid fa-car-side fa-lg"></i></div>
-                                <div>
-                                    <div class="fw-bold">Honda Civic</div>
-                                    <div class="small text-muted">2021 | ABC-1234</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Brake pad replacement and AC gas refill</span></td>
-                        <td>
-                            <span class="status-badge status-pending">
-                                <i class="fa-solid fa-clock"></i> Pending
-                            </span>
-                        </td>
-                        <td>@DateTime.Now.AddDays(2).ToString("dd MMM yyyy")</td>
-                        <td class="text-center">
-                            <button class="action-btn" title="View Details"><i class="fa-solid fa-eye"></i></button>
-                        </td>
-                    </tr>
-                    
-                    <!-- Dummy Data 2 : In Progress -->
-                    <tr data-aos="fade-up" data-aos-delay="300">
-                        <td><span class="text-primary fw-bold">#REQ-8945</span></td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="fa-solid fa-car-side fa-lg"></i></div>
-                                <div>
-                                    <div class="fw-bold">Toyota Camry</div>
-                                    <div class="small text-muted">2019 | XYZ-9876</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Engine oil change, General Service</span></td>
-                        <td>
-                            <span class="status-badge status-progress">
-                                <i class="fa-solid fa-screwdriver-wrench"></i> In Progress
-                            </span>
-                        </td>
-                        <td>@DateTime.Now.ToString("dd MMM yyyy")</td>
-                        <td class="text-center">
-                            <button class="action-btn" title="View Details"><i class="fa-solid fa-eye"></i></button>
-                        </td>
-                    </tr>
-                    
-                    <!-- Dummy Data 3 : Completed -->
-                    <tr data-aos="fade-up" data-aos-delay="400">
-                        <td><span class="text-primary fw-bold">#REQ-8822</span></td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="fa-solid fa-car-side fa-lg"></i></div>
-                                <div>
-                                    <div class="fw-bold">Ford Mustang</div>
-                                    <div class="small text-muted">2020 | DEF-4567</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Tire alignment and wheel balancing</span></td>
-                        <td>
-                            <span class="status-badge status-completed">
-                                <i class="fa-solid fa-circle-check"></i> Completed
-                            </span>
-                        </td>
-                        <td>@DateTime.Now.AddDays(-3).ToString("dd MMM yyyy")</td>
-                        <td class="text-center">
-                            <button class="action-btn" title="View Details"><i class="fa-solid fa-eye"></i></button>
-                        </td>
-                    </tr>
-                    
-                    <!-- Dummy Data 4 : Delivered -->
-                    <tr data-aos="fade-up" data-aos-delay="500">
-                        <td><span class="text-primary fw-bold">#REQ-8510</span></td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="bg-light rounded p-2 me-3 text-secondary"><i class="fa-solid fa-car-side fa-lg"></i></div>
-                                <div>
-                                    <div class="fw-bold">Tesla Model 3</div>
-                                    <div class="small text-muted">2022 | EV-0001</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="text-truncate d-inline-block" style="max-width: 200px;">Software update, Battery check</span></td>
-                        <td>
-                            <span class="status-badge status-delivered">
-                                <i class="fa-solid fa-flag-checkered"></i> Delivered
-                            </span>
-                        </td>
-                        <td>@DateTime.Now.AddDays(-15).ToString("dd MMM yyyy")</td>
-                        <td class="text-center">
-                            <button class="action-btn" title="View Details"><i class="fa-solid fa-eye"></i></button>
-                        </td>
-                    </tr>
+                    @foreach (var v in vehicles)
+                    {
+                        var vs = v.Status ?? "Pending";
+                        var vc = vs == "Approved" ? "success" : vs == "Declined" ? "danger" : "warning";
+                        <tr class="border-bottom">
+                            <td class="ps-4 py-3 fw-bold text-primary font-monospace">#@v.Vech_id</td>
+                            <td class="py-3">
+                                <span class="fw-bold font-monospace" style="background:#f1f5f9;padding:3px 10px;border-radius:6px;border:1px solid #e2e8f0;letter-spacing:1px;font-size:0.9rem;">
+                                    @(string.IsNullOrEmpty(v.RegId) ? "—" : v.RegId)
+                                </span>
+                            </td>
+                            <td class="py-3 fw-bold text-dark">
+                                <i class="fa-solid fa-car-side me-2 text-primary" style="font-size:0.85rem;"></i>@v.Car_Name
+                            </td>
+                            <td class="py-3 text-muted">@v.Car_Model</td>
+                            <td class="py-3 text-muted">@v.Year</td>
+                            <td class="py-3 text-muted font-monospace" style="font-size:0.85rem;">@v.Owner_contact</td>
+                            <td class="py-3">
+                                <span class="badge bg-@vc bg-opacity-10 text-@vc border border-@vc border-opacity-25 rounded-pill px-3 py-2 fw-bold">
+                                    @if (vs == "Approved") { <i class="fa-solid fa-circle-check me-1"></i> }
+                                    else if (vs == "Declined") { <i class="fa-solid fa-circle-xmark me-1"></i> }
+                                    else { <i class="fa-solid fa-clock me-1"></i> }
+                                    @vs
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                    @if (!vehicles.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-5">
+                                <i class="fa-solid fa-car fs-2 mb-3 d-block opacity-25"></i>
+                                No vehicle requests yet. <a href="/Customer/RequestService" class="text-primary fw-bold">Submit one now</a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- ── JOB CARDS ────────────────────────────────────── -->
+    <div class="d-flex align-items-center mb-3" data-aos="fade-up">
+        <div class="p-2 bg-warning bg-opacity-10 text-warning rounded me-3">
+            <i class="fa-solid fa-wrench"></i>
+        </div>
+        <h5 class="fw-bold text-dark mb-0">My Job Cards</h5>
+        <span class="badge bg-warning bg-opacity-10 text-warning ms-2 rounded-pill">@Model.Count</span>
+    </div>
+
+    <div class="glass-card p-0 mb-5" data-aos="fade-up">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead style="background:#f8fafc;">
+                    <tr class="text-muted text-uppercase fw-bold" style="font-size:0.75rem;letter-spacing:0.5px;">
+                        <th class="ps-4 py-3 border-0">Job ID</th>
+                        <th class="py-3 border-0">Plate No.</th>
+                        <th class="py-3 border-0">Car</th>
+                        <th class="py-3 border-0">Problem</th>
+                        <th class="py-3 border-0">Date In</th>
+                        <th class="py-3 border-0">Date Out</th>
+                        <th class="py-3 border-0">Mechanic</th>
+                        <th class="py-3 border-0">Status</th>
+                        <th class="text-center py-3 border-0">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var j in Model)
+                    {
+                        var sc = j.Status switch {
+                            "Completed" or "Delivered" => "success",
+                            "In Progress" or "Assigned" => "primary",
+                            "Testing" => "warning",
+                            _ => "secondary"
+                        };
+                        <tr class="border-bottom">
+                            <td class="ps-4 py-3 fw-bold text-primary font-monospace">#@j.J_id</td>
+                            <td class="py-3">
+                                <span class="fw-bold font-monospace" style="background:#f1f5f9;padding:3px 10px;border-radius:6px;border:1px solid #e2e8f0;letter-spacing:1px;font-size:0.85rem;">
+                                    @(string.IsNullOrEmpty(j.RegId) ? "—" : j.RegId)
+                                </span>
+                            </td>
+                            <td class="py-3 fw-medium text-dark">@j.Car_Name</td>
+                            <td class="py-3 text-muted">@j.Problem</td>
+                            <td class="py-3 text-muted">@j.Date_in?.ToString("dd MMM yyyy")</td>
+                            <td class="py-3 text-muted">@(j.Date_out.HasValue ? j.Date_out.Value.ToString("dd MMM yyyy") : "—")</td>
+                            <td class="py-3 fw-medium">
+                                <i class="fa-solid fa-wrench me-1 text-primary" style="font-size:0.8rem;"></i>@j.Mech_Name
+                            </td>
+                            <td class="py-3">
+                                <span class="badge bg-@sc bg-opacity-10 text-@sc border border-@sc border-opacity-25 rounded-pill px-3 py-2 fw-bold">
+                                    @j.Status
+                                </span>
+                            </td>
+                            <td class="py-3 text-center">
+                                <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm"
+                                        style="width:36px;height:36px;" title="View Details"
+                                        onclick="viewJob(@j.J_id,'@Html.Raw(j.RegId?.Replace("'","\\'") ?? "—")','@Html.Raw(j.Car_Name?.Replace("'","\\'") ?? "")','@Html.Raw(j.Problem?.Replace("'","\\'") ?? "")','@j.Date_in?.ToString("dd MMM yyyy")','@(j.Date_out.HasValue ? j.Date_out.Value.ToString("dd MMM yyyy") : "—")','@Html.Raw(j.Mech_Name?.Replace("'","\\'") ?? "")','@j.Status')">
+                                    <i class="fa-solid fa-eye" style="font-size:0.8rem;"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted py-4">
+                                <i class="fa-solid fa-clipboard-list fs-3 mb-2 d-block opacity-25"></i>
+                                No job cards assigned yet.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Job Detail Modal -->
+<div class="modal fade" id="jobDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0" style="border-radius:20px;overflow:hidden;">
+            <!-- Header -->
+            <div style="background:linear-gradient(135deg,var(--primary-color),#1e40af);padding:28px 32px;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="text-white fw-bold mb-1 fs-4">
+                            <i class="fa-solid fa-clipboard-list me-2"></i>Job Card Details
+                        </h5>
+                        <small class="text-white-50" id="jd-id"></small>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"></button>
+                </div>
+            </div>
+
+            <div class="modal-body p-4">
+
+                <!-- Info Grid -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="text-muted fw-semibold mb-1" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">
+                                <i class="fa-solid fa-hashtag me-1"></i>Number Plate
+                            </div>
+                            <div class="fw-bold font-monospace text-dark" style="font-size:1.1rem;letter-spacing:2px;" id="jd-plate"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="text-muted fw-semibold mb-1" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">
+                                <i class="fa-solid fa-car me-1"></i>Vehicle
+                            </div>
+                            <div class="fw-bold text-dark" id="jd-car"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="text-muted fw-semibold mb-1" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">
+                                <i class="fa-solid fa-triangle-exclamation me-1"></i>Problem
+                            </div>
+                            <div class="fw-bold text-dark" id="jd-problem"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="text-muted fw-semibold mb-1" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">
+                                <i class="fa-solid fa-user-gear me-1"></i>Mechanic
+                            </div>
+                            <div class="fw-bold text-dark" id="jd-mech"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="text-muted fw-semibold mb-1" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">
+                                <i class="fa-regular fa-calendar-plus me-1"></i>Date In
+                            </div>
+                            <div class="fw-bold text-dark" id="jd-datein"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <div class="text-muted fw-semibold mb-1" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">
+                                <i class="fa-regular fa-calendar-check me-1"></i>Date Out
+                            </div>
+                            <div class="fw-bold text-dark" id="jd-dateout"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Tracker -->
+                <div class="p-4 rounded-3 border" style="background:#f8fafc;">
+                    <h6 class="fw-bold text-dark mb-4">
+                        <i class="fa-solid fa-timeline me-2 text-primary"></i>Service Progress
+                    </h6>
+                    <div class="d-flex align-items-center justify-content-between position-relative" id="progress-steps">
+                        <!-- Steps injected by JS -->
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer border-0 pb-4 pt-0 justify-content-center">
+                <button type="button" class="btn btn-custom rounded-pill px-5 fw-bold" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .step-item { display:flex; flex-direction:column; align-items:center; flex:1; position:relative; }
+    .step-item:not(:last-child)::after {
+        content:''; position:absolute; top:18px; left:50%; width:100%; height:3px;
+        background:#e2e8f0; z-index:0;
+    }
+    .step-item.done:not(:last-child)::after { background:var(--primary-color); }
+    .step-circle {
+        width:38px; height:38px; border-radius:50%; border:3px solid #e2e8f0;
+        background:white; display:flex; align-items:center; justify-content:center;
+        font-size:0.85rem; z-index:1; transition:all 0.3s; color:#94a3b8;
+    }
+    .step-item.done .step-circle { background:var(--primary-color); border-color:var(--primary-color); color:white; }
+    .step-item.active .step-circle { background:white; border-color:var(--primary-color); color:var(--primary-color); box-shadow:0 0 0 4px rgba(37,99,235,0.15); }
+    .step-label { font-size:0.7rem; font-weight:600; color:#94a3b8; margin-top:8px; text-align:center; }
+    .step-item.done .step-label, .step-item.active .step-label { color:var(--primary-color); }
+</style>
+
+@section Scripts {
+<script>
+    const steps = ['Pending','Assigned','In Progress','Testing','Completed','Delivered'];
+    const stepIcons = ['fa-clock','fa-user-check','fa-screwdriver-wrench','fa-flask','fa-circle-check','fa-flag-checkered'];
+
+    function viewJob(id, plate, car, problem, dateIn, dateOut, mech, status) {
+        document.getElementById('jd-id').textContent      = 'Job #' + id;
+        document.getElementById('jd-plate').textContent   = plate;
+        document.getElementById('jd-car').textContent     = car;
+        document.getElementById('jd-problem').textContent = problem;
+        document.getElementById('jd-mech').textContent    = mech;
+        document.getElementById('jd-datein').textContent  = dateIn;
+        document.getElementById('jd-dateout').textContent = dateOut;
+
+        // Build progress steps
+        const currentIdx = steps.indexOf(status);
+        const container  = document.getElementById('progress-steps');
+        container.innerHTML = '';
+
+        steps.forEach((step, i) => {
+            const div = document.createElement('div');
+            div.className = 'step-item' +
+                (i < currentIdx ? ' done' : '') +
+                (i === currentIdx ? ' active' : '');
+
+            div.innerHTML = `
+                <div class="step-circle">
+                    <i class="fa-solid ${stepIcons[i]}"></i>
+                </div>
+                <div class="step-label">${step}</div>`;
+            container.appendChild(div);
+        });
+
+        new bootstrap.Modal(document.getElementById('jobDetailModal')).show();
+    }
+</script>
+}

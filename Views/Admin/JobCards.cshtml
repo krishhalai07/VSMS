@@ -1,6 +1,9 @@
+@model List<VSMS.Models.JobCard>
 @{
     ViewData["Title"] = "Job Cards";
     Layout = "~/Views/Admin/_Layout.cshtml";
+    var vehicles  = ViewBag.Vehicles  as List<VSMS.Models.Vehicle>  ?? new();
+    var mechanics = ViewBag.Mechanics as List<VSMS.Models.Mechanic> ?? new();
 }
 
 <div class="d-flex justify-content-between align-items-center mb-5">
@@ -13,116 +16,98 @@
     </button>
 </div>
 
-<div class="card-clean mb-5 p-0">
-    <div class="table-responsive p-0" style="overflow-x: visible;">
-        <table class="table table-hover table-custom mb-0 align-middle">
-            <thead class="bg-light text-muted text-uppercase fw-bold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+@if (TempData["Toast"] != null)
+{
+    <div class="alert alert-success rounded-3 py-2 mb-4"><i class="fa-solid fa-circle-check me-2"></i>@TempData["Toast"]</div>
+}
+
+<div class="card-clean mb-5 p-0" style="overflow:visible;">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="bg-light text-muted text-uppercase fw-bold" style="font-size:0.8rem;letter-spacing:0.5px;">
                 <tr>
                     <th class="ps-5 py-3 border-0">J_id</th>
                     <th class="py-3 border-0">Vech_id</th>
                     <th class="py-3 border-0">Problem</th>
-                    <th class="py-3 border-0">Date_in</th>
-                    <th class="py-3 border-0">Date_out</th>
-                    <th class="py-3 border-0">Mech_Name</th>
+                    <th class="py-3 border-0">Date In</th>
+                    <th class="py-3 border-0">Date Out</th>
+                    <th class="py-3 border-0">Mechanic</th>
                     <th class="py-3 border-0">Status</th>
                     <th class="text-center pe-5 py-3 border-0">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Job Card 1 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">1001</td>
-                    <td class="fw-bold">1</td>
-                    <td class="text-muted fw-medium">Standard Maintenance</td>
-                    <td class="text-muted">2026-03-25</td>
-                    <td class="text-muted">2026-03-26</td>
-                    <td class="fw-medium text-dark"><i class="fa-solid fa-wrench me-2 text-primary"></i>David Miller</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-primary bg-opacity-10 text-primary dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 140px; border-radius: 8px;">
-                                In Progress
-                            </button>
-                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 140px; z-index: 1050;">
-                                <li><a class="dropdown-item fw-bold text-secondary rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Pending', 'secondary')">Pending</a></li>
-                                <li><a class="dropdown-item fw-bold text-info rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Assigned', 'info')">Assigned</a></li>
-                                <li><a class="dropdown-item fw-bold text-primary rounded bg-primary bg-opacity-10 mb-1" href="#" onclick="updateJobStatus(event, this, 'In Progress', 'primary')">In Progress</a></li>
-                                <li><a class="dropdown-item fw-bold text-warning rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Testing', 'warning')">Testing</a></li>
-                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Completed', 'success')">Completed</a></li>
-                                <li><a class="dropdown-item fw-bold text-dark rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Ready', 'dark')">Ready</a></li>
-                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover" href="#" onclick="updateJobStatus(event, this, 'Delivered', 'success')">Delivered</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#createJobModal" title="Edit Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-
-                <!-- Job Card 2 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">1002</td>
-                    <td class="fw-bold">2</td>
-                    <td class="text-muted fw-medium">Brake Pad Swap</td>
-                    <td class="text-muted">2026-03-26</td>
-                    <td class="text-muted">-</td>
-                    <td class="fw-medium text-dark"><i class="fa-solid fa-wrench me-2 text-primary"></i>Sarah Jenkins</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-secondary bg-opacity-10 text-secondary dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 140px; border-radius: 8px;">
-                                Pending
-                            </button>
-                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 140px; z-index: 1050;">
-                                <li><a class="dropdown-item fw-bold text-secondary rounded bg-secondary bg-opacity-10 mb-1" href="#" onclick="updateJobStatus(event, this, 'Pending', 'secondary')">Pending</a></li>
-                                <li><a class="dropdown-item fw-bold text-info rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Assigned', 'info')">Assigned</a></li>
-                                <li><a class="dropdown-item fw-bold text-primary rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'In Progress', 'primary')">In Progress</a></li>
-                                <li><a class="dropdown-item fw-bold text-warning rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Testing', 'warning')">Testing</a></li>
-                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Completed', 'success')">Completed</a></li>
-                                <li><a class="dropdown-item fw-bold text-dark rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Ready', 'dark')">Ready</a></li>
-                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover" href="#" onclick="updateJobStatus(event, this, 'Delivered', 'success')">Delivered</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#createJobModal" title="Edit Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-
-                <!-- Job Card 3 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">1003</td>
-                    <td class="fw-bold">3</td>
-                    <td class="text-muted fw-medium">Diagnostics Scan</td>
-                    <td class="text-muted">2026-03-24</td>
-                    <td class="text-muted">2026-03-24</td>
-                    <td class="fw-medium text-dark"><i class="fa-solid fa-wrench me-2 text-primary"></i>Marcus Vance</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-success bg-opacity-10 text-success dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 140px; border-radius: 8px;">
-                                Completed
-                            </button>
-                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 140px; z-index: 1050;">
-                                <li><a class="dropdown-item fw-bold text-secondary rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Pending', 'secondary')">Pending</a></li>
-                                <li><a class="dropdown-item fw-bold text-info rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Assigned', 'info')">Assigned</a></li>
-                                <li><a class="dropdown-item fw-bold text-primary rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'In Progress', 'primary')">In Progress</a></li>
-                                <li><a class="dropdown-item fw-bold text-warning rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Testing', 'warning')">Testing</a></li>
-                                <li><a class="dropdown-item fw-bold text-success rounded bg-success bg-opacity-10 mb-1" href="#" onclick="updateJobStatus(event, this, 'Completed', 'success')">Completed</a></li>
-                                <li><a class="dropdown-item fw-bold text-dark rounded transition-hover mb-1" href="#" onclick="updateJobStatus(event, this, 'Ready', 'dark')">Ready</a></li>
-                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover" href="#" onclick="updateJobStatus(event, this, 'Delivered', 'success')">Delivered</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#createJobModal" title="Edit Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Job Card" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
+                @foreach (var j in Model)
+                {
+                    var sc = j.Status switch {
+                        "Completed" or "Delivered" => "success",
+                        "In Progress" or "Assigned" => "primary",
+                        "Testing" => "warning",
+                        _ => "secondary"
+                    };
+                    <tr class="border-bottom text-dark">
+                        <td class="ps-5 py-3 fw-bold text-primary font-monospace">#@j.J_id</td>
+                        <td class="fw-bold">@j.Vech_id</td>
+                        <td class="text-muted fw-medium">@j.Problem</td>
+                        <td class="text-muted">@j.Date_in?.ToString("yyyy-MM-dd")</td>
+                        <td class="text-muted">@(j.Date_out.HasValue ? j.Date_out.Value.ToString("yyyy-MM-dd") : "-")</td>
+                        <td class="fw-medium"><i class="fa-solid fa-wrench me-2 text-primary"></i>@j.Mech_Name</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-sm fw-bold border-0 shadow-sm bg-@sc bg-opacity-10 text-@sc dropdown-toggle d-flex justify-content-between align-items-center"
+                                        type="button" data-bs-toggle="dropdown"
+                                        style="width:130px;border-radius:8px;font-size:0.82rem;">
+                                    @j.Status
+                                </button>
+                                <ul class="dropdown-menu border-0 shadow-lg p-2" style="border-radius:12px;min-width:130px;">
+                                    @foreach (var s in new[] { "Pending", "Assigned", "In Progress", "Testing", "Completed", "Delivered" })
+                                    {
+                                        var sc2 = s switch {
+                                            "Completed" or "Delivered" => "success",
+                                            "In Progress" or "Assigned" => "primary",
+                                            "Testing" => "warning",
+                                            _ => "secondary"
+                                        };
+                                        <li>
+                                            <form method="post" action="/Admin/UpdateJobStatus">
+                                                <input type="hidden" name="id" value="@j.J_id" />
+                                                <input type="hidden" name="status" value="@s" />
+                                                <button type="submit"
+                                                        class="dropdown-item fw-bold text-@sc2 rounded @(j.Status == s ? $"bg-{sc2} bg-opacity-10" : "") mb-1"
+                                                        style="font-size:0.85rem;">
+                                                    @s
+                                                </button>
+                                            </form>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                        <td class="text-center pe-5">
+                            <form method="post" action="/Admin/DeleteJobCard" class="d-inline"
+                                  onsubmit="return confirm('Delete job card #@j.J_id?')">
+                                <input type="hidden" name="id" value="@j.J_id" />
+                                <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm"
+                                        style="width:38px;height:38px;" title="Delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="8" class="text-center text-muted py-5">No job cards found.</td></tr>
+                }
             </tbody>
         </table>
     </div>
+    <div class="p-4 border-top border-light">
+        <span class="text-muted fw-medium">@Model.Count record(s)</span>
+    </div>
 </div>
 
+<!-- Create Job Card Modal -->
 <div class="modal fade" id="createJobModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0">
@@ -131,127 +116,167 @@
                     <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
                         <i class="fa-solid fa-clipboard-list"></i>
                     </div>
-                    Generate Job Card
+                    Create Job Card
                 </h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            
-            <div class="modal-body p-4 pt-4">
-                <form>
-                    <div class="row g-4">
-                        <!-- J_id -->
-                        <div class="col-md-4" style="animation: slideUpFade 0.4s both 0.1s;">
-                            <div>
-                                <label for="J_id" class="custom-label"><i class="fa-solid fa-hashtag"></i>Job ID (J_id)</label>
-                                <input type="number" class="form-control bg-light" id="J_id" placeholder="Auto" readonly>
+            <form method="post" action="/Admin/AddJobCard">
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-solid fa-car"></i> Vehicle</label>
+                            <select name="Vech_id" class="form-select fw-bold" required>
+                                <option value="" disabled selected>Select vehicle...</option>
+                                @foreach (var v in vehicles)
+                                {
+                                    <option value="@v.Vech_id">@v.Vech_id — @v.Car_Name @v.Car_Model</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-solid fa-user-gear"></i> Mechanic</label>
+                            <select name="Mech_Name" class="form-select fw-bold" required>
+                                <option value="" disabled selected>Select mechanic...</option>
+                                @foreach (var m in mechanics)
+                                {
+                                    <option value="@m.Mech_Name">@m.Mech_Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="custom-label"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Problem / Issues</label>
+                            <!-- Hidden input that gets filled by JS -->
+                            <input type="hidden" name="Problem" id="problemValue">
+                            <div class="border rounded-3 p-3" style="background:#f8fafc;">
+                                <div class="row g-2">
+                                    @foreach (var prob in new[] {
+                                        new { icon="fa-oil-can",       label="Oil Change",          color="warning" },
+                                        new { icon="fa-car-battery",   label="Battery Issue",       color="danger"  },
+                                        new { icon="fa-circle-stop",   label="Brake Problem",       color="danger"  },
+                                        new { icon="fa-temperature-high", label="Engine Overheating", color="danger" },
+                                        new { icon="fa-tire",          label="Tyre Puncture",       color="secondary" },
+                                        new { icon="fa-wind",          label="AC Not Working",      color="info"    },
+                                        new { icon="fa-gear",          label="Gearbox Issue",       color="warning" },
+                                        new { icon="fa-bolt",          label="Electrical Fault",    color="warning" },
+                                        new { icon="fa-droplet",       label="Coolant Leak",        color="info"    },
+                                        new { icon="fa-screwdriver-wrench", label="General Service", color="primary" },
+                                        new { icon="fa-car-crash",     label="Suspension Issue",    color="secondary" },
+                                        new { icon="fa-gauge-high",    label="Engine Noise",        color="danger"  }
+                                    })
+                                    {
+                                        <div class="col-md-4 col-6">
+                                            <label class="d-flex align-items-center gap-2 p-2 rounded-3 border bg-white problem-check" style="cursor:pointer;transition:all 0.2s;">
+                                                <input type="checkbox" class="prob-cb form-check-input mt-0 flex-shrink-0"
+                                                       value="@prob.label" onchange="updateProblems()">
+                                                <i class="fa-solid @prob.icon text-@prob.color" style="font-size:0.9rem;width:16px;"></i>
+                                                <span class="fw-medium text-dark" style="font-size:0.82rem;">@prob.label</span>
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="mt-3">
+                                    <label class="custom-label mb-1" style="font-size:0.78rem;"><i class="fa-solid fa-pen me-1"></i> Other / Additional Details</label>
+                                    <input type="text" id="otherProblem" class="form-control" placeholder="Describe any other issue..." maxlength="100" oninput="updateProblems()">
+                                </div>
+                                <div class="mt-2" id="problemPreview" style="display:none;">
+                                    <small class="text-muted fw-semibold">Selected: </small>
+                                    <small class="text-primary fw-bold" id="problemPreviewText"></small>
+                                </div>
                             </div>
                         </div>
-
-                        <!-- Vech_id -->
-                        <div class="col-md-8" style="animation: slideUpFade 0.4s both 0.1s;">
-                            <div>
-                                <label for="Vech_id" class="custom-label"><i class="fa-solid fa-car"></i>Vehicle ID (Vech_id)</label>
-                                <select class="form-select fw-bold text-dark" id="Vech_id" required>
-                                    <option value="" selected disabled>Select assigned vehicle...</option>
-                                    <option value="1">1 - Toyota Camry (ABC-1234)</option>
-                                    <option value="2">2 - Honda Civic (XYZ-9876)</option>
-                                </select>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-regular fa-calendar-plus text-primary"></i> Date In</label>
+                            <input type="date" name="Date_in" class="form-control fw-bold" required>
                         </div>
-
-                        <!-- Problem -->
-                        <div class="col-12" style="animation: slideUpFade 0.4s both 0.2s;">
-                            <div>
-                                <label for="Problem" class="custom-label"><i class="fa-solid fa-triangle-exclamation text-danger"></i>Problem Description</label>
-                                <input type="text" class="form-control" id="Problem" placeholder="Brief issue description (max 50 chars)" maxlength="50" required>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-regular fa-calendar-check text-success"></i> Date Out</label>
+                            <input type="date" name="Date_out" class="form-control fw-bold">
                         </div>
-
-                        <!-- Date_in & Date_out -->
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
-                            <div>
-                                <label for="Date_in" class="custom-label"><i class="fa-regular fa-calendar-plus text-primary"></i>Date In</label>
-                                <input type="date" class="form-control text-muted fw-bold" id="Date_in" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
-                            <div>
-                                <label for="Date_out" class="custom-label"><i class="fa-regular fa-calendar-check text-success"></i>Date Out</label>
-                                <input type="date" class="form-control text-muted fw-bold" id="Date_out">
-                            </div>
-                        </div>
-
-                        <!-- Mech_Name & Status -->
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.4s;">
-                            <div>
-                                <label for="Mech_Name" class="custom-label"><i class="fa-solid fa-user-gear"></i>Mechanic Name</label>
-                                <input type="text" class="form-control" id="Mech_Name" placeholder="e.g. David Miller" maxlength="50" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.4s;">
-                            <div>
-                                <label for="Status" class="custom-label"><i class="fa-solid fa-bars-progress text-warning"></i>Job Status</label>
-                                <select class="form-select fw-bold text-dark" id="Status" required>
-                                    <option value="Pending" selected>Pending</option>
-                                    <option value="Assigned">Assigned</option>
-                                    <option value="In Progress">In Progress</option>
-                                    <option value="Testing">Testing</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Ready">Ready</option>
-                                    <option value="Delivered">Delivered</option>
-                                </select>
-                            </div>
+                        <div class="col-12">
+                            <label class="custom-label"><i class="fa-solid fa-bars-progress text-warning"></i> Status</label>
+                            <select name="Status" class="form-select fw-bold">
+                                <option value="Pending" selected>Pending</option>
+                                <option value="Assigned">Assigned</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Testing">Testing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Delivered">Delivered</option>
+                            </select>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer border-0 pb-4 pt-2">
-                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold me-2" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-animated rounded-pill px-5"><i class="fa-solid fa-play me-2"></i> Dispatch Job</button>
-            </div>
+                </div>
+                <div class="modal-footer border-0 pb-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-animated rounded-pill px-5">
+                        <i class="fa-solid fa-play me-2"></i> Dispatch Job
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-    <style>
-        .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;}
-        .hover-lift:hover { background: white; transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .table-hover tbody tr:hover { background-color: #f8fbfd; transition: background-color 0.2s; }
-        .transition-hover { transition: all 0.15s ease-in-out; }
-        .btn-check:checked + .btn-outline-primary { box-shadow: 0 4px 15px rgba(67, 56, 202, 0.3) !important; transform: translateY(-2px); }
-        .custom-dropdown-btn::after { margin-left: auto; }
-        .transition-hover:hover { background-color: #f1f5f9; color: #0f172a !important; transform: translateX(2px); }
-    </style>
+<style>
+    .table-hover tbody tr:hover { background-color:#f8fafc; }
+    .dropdown-menu { position: fixed !important; }
+    .problem-check:hover { background: #eff6ff !important; border-color: #93c5fd !important; }
+    .problem-check input[type=checkbox] { width:16px; height:16px; }
+</style>
 
 @section Scripts {
-    <script>
-        function updateJobStatus(e, element, status, colorClass) {
-            e.preventDefault();
-            const btn = element.closest('.dropdown').querySelector('.dropdown-toggle');
-            const menuItems = element.closest('.dropdown-menu').querySelectorAll('.dropdown-item');
-            
-            // Revert all item classes
-            menuItems.forEach(item => {
-                let originalClasses = item.className;
-                item.className = originalClasses.replace(/bg-[a-z]+ bg-opacity-10/g, 'transition-hover');
-            });
+<script>
+    // Reposition dropdown to fixed position on show
+    document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(btn => {
+        btn.addEventListener('shown.bs.dropdown', function () {
+            const menu = this.nextElementSibling;
+            const rect = this.getBoundingClientRect();
+            menu.style.top  = (rect.bottom + 4) + 'px';
+            menu.style.left = rect.left + 'px';
+        });
+    });
 
-            // Set button appearance
-            btn.className = `btn btn-sm fw-bold border-0 shadow-sm bg-${colorClass} bg-opacity-10 text-${colorClass} dropdown-toggle d-flex justify-content-between align-items-center`;
-            btn.innerText = status;
-            
-            // Set newly clicked item appearance
-            element.className = element.className.replace('transition-hover', `bg-${colorClass} bg-opacity-10`);
-            
-            if (typeof showToast === 'function') {
-                showToast(`Job status updated to ${status}`, colorClass === 'danger' ? 'danger' : 'success');
-            }
+    function updateProblems() {
+        const checked = [...document.querySelectorAll('.prob-cb:checked')].map(c => c.value);
+        const other   = document.getElementById('otherProblem').value.trim();
+        if (other) checked.push(other);
 
-            // Automatically close the dropdown menu after selection
-            const dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(btn);
-            if (dropdownInstance) {
-                dropdownInstance.hide();
+        const combined = checked.join(', ');
+        document.getElementById('problemValue').value = combined;
+
+        const preview = document.getElementById('problemPreview');
+        const previewText = document.getElementById('problemPreviewText');
+        if (combined) {
+            preview.style.display = 'block';
+            previewText.textContent = combined;
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+
+    // Highlight checked labels
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('prob-cb')) {
+            const label = e.target.closest('.problem-check');
+            if (e.target.checked) {
+                label.style.background = '#eff6ff';
+                label.style.borderColor = '#3b82f6';
+            } else {
+                label.style.background = 'white';
+                label.style.borderColor = '';
             }
         }
-    </script>
+    });
+
+    // Reset checkboxes when modal closes
+    document.getElementById('createJobModal').addEventListener('hidden.bs.modal', function () {
+        document.querySelectorAll('.prob-cb').forEach(cb => {
+            cb.checked = false;
+            cb.closest('.problem-check').style.background = 'white';
+            cb.closest('.problem-check').style.borderColor = '';
+        });
+        document.getElementById('otherProblem').value = '';
+        document.getElementById('problemValue').value = '';
+        document.getElementById('problemPreview').style.display = 'none';
+    });
+</script>
 }

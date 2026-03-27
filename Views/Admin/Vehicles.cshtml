@@ -1,3 +1,4 @@
+@model List<VSMS.Models.Vehicle>
 @{
     ViewData["Title"] = "Vehicles";
     Layout = "~/Views/Admin/_Layout.cshtml";
@@ -13,267 +14,202 @@
     </button>
 </div>
 
-<div class="card-clean mb-5 p-0">
+@if (TempData["Toast"] != null)
+{
+    <div class="alert alert-success rounded-3 py-2 mb-4"><i class="fa-solid fa-circle-check me-2"></i>@TempData["Toast"]</div>
+}
+
+<div class="card-clean mb-5 p-0" style="overflow:visible;">
     <div class="d-flex justify-content-between align-items-center p-4 border-bottom border-light">
-        <div class="search-bar d-flex align-items-center bg-light border" style="width: 350px;">
+        <div class="search-bar d-flex align-items-center bg-light border" style="width:350px;">
             <i class="fa-solid fa-search text-muted me-2"></i>
             <input type="text" placeholder="Search plates or models..." class="bg-transparent border-0 w-100 outline-none">
         </div>
+        <span class="text-muted fw-medium">@Model.Count record(s)</span>
     </div>
 
-    <div class="table-responsive p-0" style="overflow-x: visible;">
-        <table class="table table-hover table-custom mb-0 align-middle">
-            <thead class="bg-light text-muted text-uppercase fw-bold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+    <div class="table-responsive" style="overflow-x:auto; overflow-y:visible;">
+        <table class="table table-hover mb-0 align-middle" style="min-width:1100px;">
+            <thead class="bg-light text-muted text-uppercase fw-bold" style="font-size:0.75rem;letter-spacing:0.5px;">
                 <tr>
-                    <th class="ps-5 py-3 border-0">Vech_id</th>
-                    <th class="py-3 border-0">RegId</th>
-                    <th class="py-3 border-0">Car_Name</th>
-                    <th class="py-3 border-0">Car_Model</th>
-                    <th class="py-3 border-0">Owner_Name</th>
-                    <th class="py-3 border-0">Year</th>
-                    <th class="py-3 border-0">Owner_contact</th>
-                    <th class="py-3 border-0">Status</th>
-                    <th class="text-center pe-5 py-3 border-0">Actions</th>
+                    <th class="ps-4 py-3 border-0" style="width:70px;">ID</th>
+                    <th class="py-3 border-0" style="width:110px;">Plate No.</th>
+                    <th class="py-3 border-0" style="width:140px;">Car Name</th>
+                    <th class="py-3 border-0" style="width:100px;">Model</th>
+                    <th class="py-3 border-0" style="width:130px;">Owner</th>
+                    <th class="py-3 border-0" style="width:170px;">Email</th>
+                    <th class="py-3 border-0" style="width:65px;">Year</th>
+                    <th class="py-3 border-0" style="width:120px;">Contact</th>
+                    <th class="py-3 border-0" style="width:130px;">Status</th>
+                    <th class="text-center py-3 border-0 pe-3" style="width:100px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Vehicle 1 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">1</td>
-                    <td class="text-muted fw-bold font-monospace">10101</td>
-                    <td class="fw-bold text-dark">
-                        <div class="d-flex align-items-center">
-                            <div class="p-2 bg-primary bg-opacity-10 text-primary rounded shadow-sm me-3 border border-primary border-opacity-25">
-                                <i class="fa-solid fa-car-side"></i>
+                @foreach (var v in Model)
+                {
+                    var st = v.Status ?? "Pending";
+                    var stColor = st == "Approved" ? "success" : st == "Declined" ? "danger" : "warning";
+                    <tr class="border-bottom text-dark">
+                        <td class="ps-4 py-3 fw-bold text-primary font-monospace">@v.Vech_id</td>
+                        <td class="py-3">
+                            <span class="fw-bold font-monospace text-dark" style="letter-spacing:2px;font-size:0.95rem;background:#f1f5f9;padding:4px 10px;border-radius:6px;border:1px solid #e2e8f0;display:inline-block;">
+                                @v.RegId
+                            </span>
+                        </td>
+                        <td class="py-3 fw-bold text-dark">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="p-1 bg-primary bg-opacity-10 text-primary rounded" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;">
+                                    <i class="fa-solid fa-car-side" style="font-size:0.75rem;"></i>
+                                </div>
+                                <span class="text-truncate" style="max-width:90px;" title="@v.Car_Name">@v.Car_Name</span>
                             </div>
-                            Toyota
-                        </div>
-                    </td>
-                    <td class="fw-medium text-secondary">Camry</td>
-                    <td class="fw-medium text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>John Doe</td>
-                    <td class="text-muted fw-bold">2019</td>
-                    <td class="text-muted fw-medium font-monospace"><i class="fa-solid fa-phone me-2 text-secondary"></i>1234567890</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-success bg-opacity-10 text-success dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 130px; border-radius: 8px;">
-                                Approved
-                            </button>
-                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 130px; z-index: 1050;">
-                                <li><a class="dropdown-item fw-bold text-success rounded bg-success bg-opacity-10 mb-1" href="#" onclick="updateVehicleStatus(event, this, 'Approved', 'success')">Approved</a></li>
-                                <li><a class="dropdown-item fw-bold text-danger rounded transition-hover" href="#" onclick="updateVehicleStatus(event, this, 'Declined', 'danger')">Declined</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-secondary rounded-circle shadow-sm me-2 hover-elevate" title="Send Email" style="width: 38px; height: 38px;" onclick="showToast('Email draft opened for John Doe', 'primary')"><i class="fa-solid fa-envelope"></i></button>
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#addVehicleModal" title="Edit Vehicle" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Vehicle" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-                
-                <!-- Vehicle 2 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">2</td>
-                    <td class="text-muted fw-bold font-monospace">98765</td>
-                    <td class="fw-bold text-dark">
-                        <div class="d-flex align-items-center">
-                            <div class="p-2 bg-success bg-opacity-10 text-success rounded shadow-sm me-3 border border-success border-opacity-25">
-                                <i class="fa-solid fa-car-side"></i>
+                        </td>
+                        <td class="py-3 text-muted fw-medium">@v.Car_Model</td>
+                        <td class="py-3 fw-medium text-dark">
+                            <span class="text-truncate d-block" style="max-width:120px;" title="@v.Owner_Name">
+                                <i class="fa-regular fa-user me-1 text-muted" style="font-size:0.8rem;"></i>@v.Owner_Name
+                            </span>
+                        </td>
+                        <td class="py-3">
+                            <span class="text-truncate d-block text-muted" style="max-width:160px;font-size:0.82rem;" title="@v.Owner_Email">
+                                <i class="fa-regular fa-envelope me-1 text-primary" style="font-size:0.75rem;"></i>@v.Owner_Email
+                            </span>
+                        </td>
+                        <td class="py-3 text-muted fw-bold">@v.Year</td>
+                        <td class="py-3 text-muted font-monospace" style="font-size:0.85rem;">@v.Owner_contact</td>
+                        <td class="py-3">
+                            <div class="dropdown">
+                                <button class="btn btn-sm fw-bold border-0 shadow-sm bg-@stColor bg-opacity-10 text-@stColor dropdown-toggle"
+                                        type="button" data-bs-toggle="dropdown"
+                                        style="width:115px;border-radius:8px;font-size:0.8rem;">
+                                    @st
+                                </button>
+                                <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius:12px;min-width:130px;">
+                                    <li>
+                                        <form method="post" action="/Admin/UpdateVehicleStatus">
+                                            <input type="hidden" name="id" value="@v.Vech_id" />
+                                            <input type="hidden" name="status" value="Approved" />
+                                            <button type="submit" class="dropdown-item fw-bold text-success rounded @(st=="Approved"?"bg-success bg-opacity-10":"") mb-1" style="font-size:0.85rem;">
+                                                <i class="fa-solid fa-check me-1"></i>Approved
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form method="post" action="/Admin/UpdateVehicleStatus">
+                                            <input type="hidden" name="id" value="@v.Vech_id" />
+                                            <input type="hidden" name="status" value="Declined" />
+                                            <button type="submit" class="dropdown-item fw-bold text-danger rounded @(st=="Declined"?"bg-danger bg-opacity-10":"")" style="font-size:0.85rem;">
+                                                <i class="fa-solid fa-xmark me-1"></i>Declined
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </div>
-                            Honda
-                        </div>
-                    </td>
-                    <td class="fw-medium text-secondary">Civic</td>
-                    <td class="fw-medium text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>Jane Smith</td>
-                    <td class="text-muted fw-bold">2021</td>
-                    <td class="text-muted fw-medium font-monospace"><i class="fa-solid fa-phone me-2 text-secondary"></i>9876543210</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-success bg-opacity-10 text-success dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 130px; border-radius: 8px;">
-                                Approved
-                            </button>
-                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 130px; z-index: 1050;">
-                                <li><a class="dropdown-item fw-bold text-success rounded bg-success bg-opacity-10 mb-1" href="#" onclick="updateVehicleStatus(event, this, 'Approved', 'success')">Approved</a></li>
-                                <li><a class="dropdown-item fw-bold text-danger rounded transition-hover" href="#" onclick="updateVehicleStatus(event, this, 'Declined', 'danger')">Declined</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-secondary rounded-circle shadow-sm me-2 hover-elevate" title="Send Email" style="width: 38px; height: 38px;" onclick="showToast('Email draft opened for Jane Smith', 'primary')"><i class="fa-solid fa-envelope"></i></button>
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#addVehicleModal" title="Edit Vehicle" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Vehicle" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-
-                <!-- Vehicle 3 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">3</td>
-                    <td class="text-muted fw-bold font-monospace">15015</td>
-                    <td class="fw-bold text-dark">
-                        <div class="d-flex align-items-center">
-                            <div class="p-2 bg-warning bg-opacity-10 text-warning rounded shadow-sm me-3 border border-warning border-opacity-25">
-                                <i class="fa-solid fa-truck-pickup"></i>
-                            </div>
-                            Ford
-                        </div>
-                    </td>
-                    <td class="fw-medium text-secondary">F-150</td>
-                    <td class="fw-medium text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>Robert Johnson</td>
-                    <td class="text-muted fw-bold">2018</td>
-                    <td class="text-muted fw-medium font-monospace"><i class="fa-solid fa-phone me-2 text-secondary"></i>5555555555</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-danger bg-opacity-10 text-danger dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 130px; border-radius: 8px;">
-                                Declined
-                            </button>
-                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 130px; z-index: 1050;">
-                                <li><a class="dropdown-item fw-bold text-success rounded transition-hover mb-1" href="#" onclick="updateVehicleStatus(event, this, 'Approved', 'success')">Approved</a></li>
-                                <li><a class="dropdown-item fw-bold text-danger rounded bg-danger bg-opacity-10" href="#" onclick="updateVehicleStatus(event, this, 'Declined', 'danger')">Declined</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-secondary rounded-circle shadow-sm me-2 hover-elevate" title="Send Email" style="width: 38px; height: 38px;" onclick="showToast('Email draft opened for Robert Johnson', 'primary')"><i class="fa-solid fa-envelope"></i></button>
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#addVehicleModal" title="Edit Vehicle" style="width: 38px; height: 38px;"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Vehicle" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-
-                <!-- Vehicle 4 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">4</td>
-                    <td class="text-muted fw-bold font-monospace">30003</td>
-                    <td class="fw-bold text-dark">
-                        <div class="d-flex align-items-center">
-                            <div class="p-2 bg-info bg-opacity-10 text-info rounded shadow-sm me-3 border border-info border-opacity-25">
-                                <i class="fa-solid fa-bolt"></i>
-                            </div>
-                            Tesla
-                        </div>
-                    </td>
-                    <td class="fw-medium text-secondary">Model 3</td>
-                    <td class="fw-medium text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>Emily Davis</td>
-                    <td class="text-muted fw-bold">2023</td>
-                    <td class="text-muted fw-medium font-monospace"><i class="fa-solid fa-phone me-2 text-secondary"></i>4444444444</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-sm fw-bold border-0 shadow-sm bg-success bg-opacity-10 text-success dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 130px; border-radius: 8px;">
-                                Approved
-                            </button>
-                            <ul class="dropdown-menu shadow-lg border-0 p-2 bg-white" style="border-radius: 12px; min-width: 130px; z-index: 1050;">
-                                <li><a class="dropdown-item fw-bold text-success rounded bg-success bg-opacity-10 mb-1" href="#" onclick="updateVehicleStatus(event, this, 'Approved', 'success')">Approved</a></li>
-                                <li><a class="dropdown-item fw-bold text-danger rounded transition-hover" href="#" onclick="updateVehicleStatus(event, this, 'Declined', 'danger')">Declined</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-secondary rounded-circle shadow-sm me-2 hover-elevate" title="Send Email" style="width: 38px; height: 38px;" onclick="showToast('Email draft opened for Emily Davis', 'primary')"><i class="fa-solid fa-envelope"></i></button>
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" title="Edit Vehicle" style="width: 38px; height: 38px;" data-bs-toggle="modal" data-bs-target="#addVehicleModal"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" title="Delete Vehicle" style="width: 38px; height: 38px;" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
+                        </td>
+                        <td class="py-3 text-center pe-3">
+                            <form method="post" action="/Admin/SendVehicleEmail" class="d-inline">
+                                <input type="hidden" name="id" value="@v.Vech_id" />
+                                <button type="submit" class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-1 hover-elevate"
+                                        style="width:34px;height:34px;" title="Send Email">
+                                    <i class="fa-solid fa-envelope" style="font-size:0.8rem;"></i>
+                                </button>
+                            </form>
+                            <form method="post" action="/Admin/DeleteVehicle" class="d-inline"
+                                  onsubmit="return confirm('Delete this vehicle?')">
+                                <input type="hidden" name="id" value="@v.Vech_id" />
+                                <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate"
+                                        style="width:34px;height:34px;" title="Delete">
+                                    <i class="fa-solid fa-trash" style="font-size:0.8rem;"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="10" class="text-center text-muted py-5">
+                        <i class="fa-solid fa-car fs-2 mb-3 d-block opacity-25"></i>No vehicles found.
+                    </td></tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Forms Animated Modal -->
+<!-- Add Vehicle Modal -->
 <div class="modal fade" id="addVehicleModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0">
             <div class="modal-header">
                 <h5 class="modal-title d-flex align-items-center fs-4">
                     <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
                         <i class="fa-solid fa-car-burst"></i>
                     </div>
-                    Log Vehicle
+                    Log New Vehicle
                 </h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            
-            <div class="modal-body p-4 pt-4">
-                <form>
-                    <div class="row g-4">
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                            <div>
-                                <label for="vechId" class="custom-label"><i class="fa-solid fa-hashtag"></i>Vech_id</label>
-                                <input type="number" class="form-control font-monospace fw-bold text-primary" id="vechId" placeholder="e.g. 1" required>
-                            </div>
+            <form method="post" action="/Admin/AddVehicle">
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-solid fa-barcode"></i> Number Plate</label>
+                            <input type="text" name="RegId" class="form-control font-monospace fw-bold text-uppercase"
+                                   placeholder="e.g. MH12AB1234" maxlength="20"
+                                   oninput="this.value=this.value.toUpperCase()">
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                            <div>
-                                <label for="regId" class="custom-label"><i class="fa-solid fa-barcode"></i>RegId</label>
-                                <input type="number" class="form-control font-monospace text-dark fw-medium" id="regId" placeholder="e.g. 10101" required>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-solid fa-industry"></i> Car Name</label>
+                            <input type="text" name="Car_Name" class="form-control" placeholder="e.g. Toyota" required>
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                            <div>
-                                <label for="carName" class="custom-label"><i class="fa-solid fa-industry"></i>Car_Name</label>
-                                <input type="text" class="form-control text-dark fw-medium" id="carName" placeholder="e.g. Toyota" required>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-solid fa-car-rear"></i> Car Model</label>
+                            <input type="text" name="Car_Model" class="form-control" placeholder="e.g. Camry" required>
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                            <div>
-                                <label for="carModel" class="custom-label"><i class="fa-solid fa-car-rear"></i>Car_Model</label>
-                                <input type="text" class="form-control text-dark fw-medium" id="carModel" placeholder="e.g. Camry" required>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-regular fa-calendar-days"></i> Year</label>
+                            <input type="number" name="Year" class="form-control" placeholder="2020">
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
-                            <div>
-                                <label for="year" class="custom-label"><i class="fa-regular fa-calendar-days"></i>Year</label>
-                                <input type="number" class="form-control text-dark fw-medium" id="year" placeholder="2019" required>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-regular fa-user"></i> Owner Name</label>
+                            <input type="text" name="Owner_Name" class="form-control" placeholder="e.g. John Doe" required>
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
-                            <div>
-                                <label for="ownerName" class="custom-label"><i class="fa-regular fa-user"></i>Owner_Name</label>
-                                <input type="text" class="form-control text-dark fw-medium" id="ownerName" placeholder="e.g. John Doe" required>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-solid fa-phone"></i> Owner Contact</label>
+                            <input type="number" name="Owner_contact" class="form-control" placeholder="e.g. 1234567890">
                         </div>
-                        <div class="col-md-12" style="animation: slideUpFade 0.4s both 0.4s;">
-                            <div>
-                                <label for="ownerContact" class="custom-label"><i class="fa-solid fa-phone"></i>Owner_contact</label>
-                                <input type="number" class="form-control font-monospace text-dark fw-medium" id="ownerContact" placeholder="e.g. 1234567890" required>
-                            </div>
+                        <div class="col-12">
+                            <label class="custom-label"><i class="fa-regular fa-envelope"></i> Owner Email</label>
+                            <input type="email" name="Owner_Email" class="form-control" placeholder="e.g. owner@email.com">
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer border-0 pb-4 pt-2">
-                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold me-2" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-animated rounded-pill px-5"><i class="fa-solid fa-check me-2"></i> Save Asset</button>
-            </div>
+                </div>
+                <div class="modal-footer border-0 pb-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold me-2" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-animated rounded-pill px-5">
+                        <i class="fa-solid fa-check me-2"></i> Save Asset
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <style>
-    .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important; background: white !important;}
-    .table-hover tbody tr:hover { background-color: #f8fafc; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: all 0.2s; }
+    .hover-elevate:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important; background: white !important; }
+    .table-hover tbody tr:hover { background-color: #f8fafc; transition: all 0.2s; }
+    .dropdown-menu { position: fixed !important; }
 </style>
 
 @section Scripts {
-    <script>
-        function updateVehicleStatus(e, element, status, colorClass) {
-            e.preventDefault();
-            const btn = element.closest('.dropdown').querySelector('.dropdown-toggle');
-            const menuItems = element.closest('.dropdown-menu').querySelectorAll('.dropdown-item');
-            
-            // reset menu item styling
-            menuItems.forEach(item => {
-                item.className = item.className.replace(/bg-[a-z]+ bg-opacity-10/g, 'transition-hover');
-            });
-
-            // Set button classes and text
-            btn.className = `btn btn-sm fw-bold border-0 shadow-sm bg-${colorClass} bg-opacity-10 text-${colorClass} dropdown-toggle d-flex justify-content-between align-items-center`;
-            btn.innerText = status;
-            
-            // Highlight selected option
-            element.className = element.className.replace('transition-hover', `bg-${colorClass} bg-opacity-10`);
-            
-            if (typeof showToast === 'function') {
-                showToast(`Vehicle status changed to ${status}`, colorClass === 'danger' ? 'danger' : 'success');
-            }
-        }
-    </script>
+<script>
+    document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(btn => {
+        btn.addEventListener('shown.bs.dropdown', function () {
+            const menu = this.nextElementSibling;
+            const rect = this.getBoundingClientRect();
+            menu.style.top  = (rect.bottom + 4) + 'px';
+            menu.style.left = rect.left + 'px';
+        });
+    });
+</script>
 }

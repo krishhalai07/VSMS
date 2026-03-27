@@ -1,6 +1,6 @@
 @{
     ViewData["Title"] = "Request Service";
-    Layout = "_Layout";
+    Layout = "~/Views/Customer/_Layout.cshtml";
 }
 
 <style>
@@ -8,7 +8,6 @@
         padding: 50px 0;
         background: linear-gradient(to bottom, #f8fafc, #ffffff);
     }
-    
     .form-card {
         background: white;
         border-radius: 20px;
@@ -16,7 +15,6 @@
         border: 1px solid rgba(0,0,0,0.05);
         overflow: hidden;
     }
-    
     .form-header {
         background: var(--primary-color);
         color: white;
@@ -24,7 +22,6 @@
         text-align: center;
         position: relative;
     }
-    
     .form-header::after {
         content: '';
         position: absolute;
@@ -35,17 +32,8 @@
         border-style: solid;
         border-color: var(--primary-color) transparent transparent transparent;
     }
-    
-    .form-body {
-        padding: 40px;
-    }
-    
-    .form-label {
-        font-weight: 600;
-        color: #475569;
-        margin-bottom: 8px;
-    }
-    
+    .form-body { padding: 40px; }
+    .form-label { font-weight: 600; color: #475569; margin-bottom: 8px; }
     .form-control, .form-select {
         border-radius: 10px;
         padding: 12px 15px;
@@ -53,13 +41,16 @@
         transition: all 0.3s;
         background-color: #f8fafc;
     }
-    
     .form-control:focus, .form-select:focus {
         background-color: white;
         border-color: var(--primary-color);
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
     }
-    
+    .form-control[readonly] {
+        background-color: #f1f5f9;
+        cursor: not-allowed;
+        color: #475569;
+    }
     .info-card {
         background: white;
         padding: 30px;
@@ -67,7 +58,6 @@
         box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         border-left: 5px solid var(--accent-color);
     }
-    
     .btn-submit {
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
         color: white;
@@ -78,16 +68,29 @@
         font-size: 1.1rem;
         transition: all 0.3s;
     }
-    
     .btn-submit:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 10px 20px rgba(37,99,235,0.3);
         color: white;
     }
 </style>
 
 <div class="request-section">
     <div class="container">
+
+        @if (TempData["SvcSuccess"] != null)
+        {
+            <div class="alert alert-success rounded-3 mb-4 fw-medium text-center">
+                <i class="fa-solid fa-circle-check me-2"></i>@TempData["SvcSuccess"]
+            </div>
+        }
+        @if (TempData["SvcError"] != null)
+        {
+            <div class="alert alert-danger rounded-3 mb-4 fw-medium text-center">
+                <i class="fa-solid fa-circle-exclamation me-2"></i>@TempData["SvcError"]
+            </div>
+        }
+
         <div class="row align-items-center mb-5" data-aos="fade-down">
             <div class="col-12 text-center">
                 <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-2 fw-bold">Service Booking</span>
@@ -106,51 +109,59 @@
                         <p class="mb-0 text-white-50">Please provide accurate information for better service</p>
                     </div>
                     <div class="form-body">
-                        <form action="#" method="get">
-                            <!-- Customer Info -->
+                        <form method="post" action="/Customer/RequestService" autocomplete="off">
+
+                            <!-- Personal Information -->
                             <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-user me-2"></i>Personal Information</h5>
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">Customer Name</label>
-                                    <input type="text" class="form-control" placeholder="John Doe" required>
+                                    <label class="form-label">Owner Name</label>
+                                    <input type="text" name="Owner_Name" class="form-control" placeholder="Your full name" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" placeholder="+1 (555) 000-0000" required>
+                                    <input type="text" name="Owner_contact" class="form-control" placeholder="e.g. 9876543210">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">
+                                        Email Address
+                                        <span class="badge bg-primary bg-opacity-10 text-primary ms-2" style="font-size:0.7rem;">Auto-filled</span>
+                                    </label>
+                                    <input type="email" name="Owner_Email" class="form-control" value="@ViewBag.CustomerEmail" readonly>
+                                    <small class="text-muted"><i class="fa-solid fa-lock me-1"></i>Fetched from your profile</small>
                                 </div>
                             </div>
-                            
+
                             <hr class="text-muted my-4">
 
-                            <!-- Vehicle Info -->
+                            <!-- Vehicle Information -->
                             <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-car me-2"></i>Vehicle Information</h5>
                             <div class="row g-3 mb-4">
-                                <div class="col-md-6">
-                                    <label class="form-label">Vehicle Name</label>
-                                    <input type="text" class="form-control" placeholder="e.g. Honda Civic" required>
+                                <div class="col-12">
+                                    <label class="form-label">
+                                        Number Plate / Registration
+                                    </label>
+                                    <input type="text" name="NumberPlate" class="form-control fw-bold text-uppercase"
+                                           placeholder="e.g. MH12AB1234" maxlength="20"
+                                           style="letter-spacing:2px;font-size:1.05rem;"
+                                           oninput="this.value=this.value.toUpperCase()" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Vehicle Model (Year)</label>
-                                    <input type="text" class="form-control" placeholder="e.g. 2021" required>
+                                    <label class="form-label">Car Name</label>
+                                    <input type="text" name="Car_Name" class="form-control" placeholder="e.g. Honda Civic" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Registration Number</label>
-                                    <input type="text" class="form-control" placeholder="ABC-1234" required>
+                                    <label class="form-label">Car Model</label>
+                                    <input type="text" name="Car_Model" class="form-control" placeholder="e.g. Camry" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Preferred Date</label>
-                                    <input type="date" class="form-control" required>
+                                    <label class="form-label">Year</label>
+                                    <input type="number" name="Year" class="form-control" placeholder="e.g. 2021" min="1990" max="2099">
                                 </div>
-                            </div>
-                            
-                            <!-- Problem Description -->
-                            <div class="mb-5">
-                                <label class="form-label">Problem Description</label>
-                                <textarea class="form-control" rows="4" placeholder="Please describe the issue in detail..." required></textarea>
                             </div>
 
-                            <button type="button" class="btn btn-submit w-100" onclick="alert('Service requested successfully!')">
-                                <i class="fa-solid fa-paper-plane me-2"></i> Submit Request
+                            <button type="submit" class="btn btn-submit w-100">
+                                <i class="fa-solid fa-paper-plane me-2"></i>Submit Request
                             </button>
                         </form>
                     </div>
@@ -160,9 +171,8 @@
             <!-- Info Column -->
             <div class="col-lg-4" data-aos="fade-left" data-aos-delay="200">
                 <div class="info-card mb-4" data-aos="fade-up" data-aos-delay="300">
-                    <div>
-                        <h5 class="fw-bold mb-3"><i class="fa-solid fa-circle-question text-accent me-2"></i>Need Help?</h5>
-                        <p class="text-muted mb-4">If you are unsure about the problem, just describe the symptoms (e.g., strange noise, vibrating steering wheel) and our expert mechanics will diagnose it.</p>
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-circle-question text-warning me-2"></i>Need Help?</h5>
+                    <p class="text-muted mb-4">If you are unsure about the problem, just describe the symptoms and our expert mechanics will diagnose it.</p>
                     <ul class="list-unstyled mb-0">
                         <li class="mb-3 d-flex align-items-center">
                             <i class="fa-solid fa-phone text-primary me-3"></i>
@@ -170,22 +180,19 @@
                         </li>
                         <li class="d-flex align-items-center">
                             <i class="fa-solid fa-envelope text-primary me-3"></i>
-                            <span class="fw-semibold">support@autocare.com</span>
+                            <span class="fw-semibold">support@vsms.com</span>
                         </li>
                     </ul>
-                    </div>
                 </div>
-                
+
                 <div class="info-card" data-aos="fade-up" data-aos-delay="400" style="border-left-color: var(--primary-color);">
-                    <div>
-                        <h5 class="fw-bold mb-3"><i class="fa-solid fa-shield-halved text-primary me-2"></i>Our Guarantee</h5>
-                        <ul class="list-unstyled mb-0 text-muted">
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-shield-halved text-primary me-2"></i>Our Guarantee</h5>
+                    <ul class="list-unstyled mb-0 text-muted">
                         <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> 100% Genuine Parts</li>
                         <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Transparent Pricing</li>
                         <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i> Expert Mechanics</li>
                         <li><i class="fa-solid fa-check text-success me-2"></i> Service Warranty</li>
                     </ul>
-                    </div>
                 </div>
             </div>
         </div>

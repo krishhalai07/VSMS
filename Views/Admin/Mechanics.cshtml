@@ -1,3 +1,4 @@
+@model List<VSMS.Models.Mechanic>
 @{
     ViewData["Title"] = "Mechanics";
     Layout = "~/Views/Admin/_Layout.cshtml";
@@ -6,106 +7,62 @@
 <div class="d-flex justify-content-between align-items-center mb-5">
     <div>
         <h1 class="page-header mb-1">Workshop Specialists</h1>
-        <p class="text-muted"><i class="fa-solid fa-user-ninja me-2 text-primary"></i>Manage your team of certified mechanical operators</p>
+        <p class="text-muted"><i class="fa-solid fa-wrench me-2 text-primary"></i>Manage your mechanic team</p>
     </div>
     <button type="button" class="btn-animated" data-bs-toggle="modal" data-bs-target="#addMechanicModal">
-        <i class="fa-solid fa-plus me-2"></i> Add Specialist
+        <i class="fa-solid fa-plus me-2"></i> Add Mechanic
     </button>
 </div>
 
-<!-- Cards omitted for brevity -->
+@if (TempData["Toast"] != null)
+{
+    <div class="alert alert-success rounded-3 py-2 mb-4"><i class="fa-solid fa-circle-check me-2"></i>@TempData["Toast"]</div>
+}
+
 <div class="row g-4 mb-5">
-    <!-- Mechanic 1 -->
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card-clean text-center overflow-hidden h-100">
-            <div class="bg-primary" style="height: 60px;"></div>
-            <div class="px-4 pb-4 position-relative" style="margin-top: -40px;">
-                <img src="https://ui-avatars.com/api/?name=David+Miller&background=fff&color=4338ca&bold=true&size=100" class="rounded-circle mb-3 bg-white p-1 shadow-sm" style="border: 2px solid #e2e8f0;">
-                
-                <h5 class="fw-bolder text-dark mb-4 mt-2">David Miller</h5>
-                
-                <div class="d-flex justify-content-center border-top border-bottom py-3 mb-4">
-                    <div class="px-3 border-end w-50">
-                        <div class="text-muted fw-bold text-sm text-uppercase">Mech_id</div>
-                        <div class="fw-bolder fs-5 text-dark">1</div>
+    @foreach (var m in Model)
+    {
+        var badgeClass = m.Status == "Available" ? "success" : m.Status == "Off Duty" ? "secondary" : "warning";
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card-clean text-center overflow-hidden h-100">
+                <div class="bg-primary" style="height:55px;"></div>
+                <div class="px-4 pb-4 position-relative" style="margin-top:-35px;">
+                    <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(m.Mech_Name ?? "M")&background=fff&color=4338ca&bold=true&size=80"
+                         class="rounded-circle bg-white p-1 shadow-sm mb-2" style="border:2px solid #e2e8f0;">
+                    <h5 class="fw-bolder text-dark mb-3">@m.Mech_Name</h5>
+                    <div class="d-flex justify-content-center border-top border-bottom py-3 mb-3">
+                        <div class="px-3 border-end w-50">
+                            <div class="text-muted fw-bold" style="font-size:0.75rem;">MECH ID</div>
+                            <div class="fw-bolder fs-5 text-dark">@m.Mech_id</div>
+                        </div>
+                        <div class="px-3 w-50">
+                            <div class="text-muted fw-bold" style="font-size:0.75rem;">CONTACT</div>
+                            <div class="fw-bold text-dark" style="font-size:0.9rem;">@m.Mech_Contact</div>
+                        </div>
                     </div>
-                    <div class="px-3 w-50">
-                        <div class="text-muted fw-bold text-sm text-uppercase">Mech_Contact</div>
-                        <div class="fw-bolder fs-6 mt-1 text-dark">1234567890</div>
-                    </div>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-4 py-2 fw-bold">ON JOB</span>
-                    <div>
-                        <button class="btn btn-light text-primary rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#editMechanicModal" title="Edit Profile"><i class="fa-solid fa-pen text-sm"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mechanic 2 -->
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card-clean text-center overflow-hidden h-100">
-            <div class="bg-success" style="height: 60px;"></div>
-            <div class="px-4 pb-4 position-relative" style="margin-top: -40px;">
-                <img src="https://ui-avatars.com/api/?name=Sarah+Jenkins&background=fff&color=10b981&bold=true&size=100" class="rounded-circle mb-3 bg-white p-1 shadow-sm" style="border: 2px solid #e2e8f0;">
-                
-                <h5 class="fw-bolder text-dark mb-4 mt-2">Sarah Jenkins</h5>
-                
-                <div class="d-flex justify-content-center border-top border-bottom py-3 mb-4">
-                    <div class="px-3 border-end w-50">
-                        <div class="text-muted fw-bold text-sm text-uppercase">Mech_id</div>
-                        <div class="fw-bolder fs-5 text-dark">2</div>
-                    </div>
-                    <div class="px-3 w-50">
-                        <div class="text-muted fw-bold text-sm text-uppercase">Mech_Contact</div>
-                        <div class="fw-bolder fs-6 mt-1 text-dark">9876543210</div>
-                    </div>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-4 py-2 fw-bold">ON JOB</span>
-                    <div>
-                        <button class="btn btn-light text-primary rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#editMechanicModal" title="Edit Profile"><i class="fa-solid fa-pen text-sm"></i></button>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-@badgeClass bg-opacity-10 text-@badgeClass border border-@badgeClass border-opacity-25 rounded-pill px-3 py-2 fw-bold">
+                            @m.Status?.ToUpper()
+                        </span>
+                        <form method="post" action="/Admin/DeleteMechanic" class="d-inline"
+                              onsubmit="return confirm('Delete @m.Mech_Name?')">
+                            <input type="hidden" name="id" value="@m.Mech_id" />
+                            <button class="btn btn-light text-danger rounded-circle shadow-sm" title="Delete">
+                                <i class="fa-solid fa-trash" style="font-size:0.85rem;"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Mechanic 3 -->
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card-clean text-center overflow-hidden h-100">
-            <div class="bg-secondary" style="height: 60px;"></div>
-            <div class="px-4 pb-4 position-relative" style="margin-top: -40px;">
-                <img src="https://ui-avatars.com/api/?name=Marcus+Vance&background=fff&color=64748b&bold=true&size=100" class="rounded-circle mb-3 bg-white p-1 shadow-sm" style="border: 2px solid #e2e8f0;">
-                
-                <h5 class="fw-bolder text-dark mb-4 mt-2">Marcus Vance</h5>
-                
-                <div class="d-flex justify-content-center border-top border-bottom py-3 mb-4">
-                    <div class="px-3 border-end w-50">
-                        <div class="text-muted fw-bold text-sm text-uppercase">Mech_id</div>
-                        <div class="fw-bolder fs-5 text-dark">3</div>
-                    </div>
-                    <div class="px-3 w-50">
-                        <div class="text-muted fw-bold text-sm text-uppercase">Mech_Contact</div>
-                        <div class="fw-bolder fs-6 mt-1 text-dark">5555555555</div>
-                    </div>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-4 py-2 fw-bold">AVAILABLE</span>
-                    <div>
-                        <button class="btn btn-light text-primary rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#editMechanicModal" title="Edit Profile"><i class="fa-solid fa-pen text-sm"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    }
+    @if (!Model.Any())
+    {
+        <div class="col-12 text-center text-muted py-5">No mechanics added yet.</div>
+    }
 </div>
 
+<!-- Add Mechanic Modal -->
 <div class="modal fade" id="addMechanicModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
@@ -114,109 +71,38 @@
                     <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
-                    Add Specialist
+                    Add Mechanic
                 </h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            
-            <div class="modal-body p-4 pt-4">
-                <form>
-                    <div class="row g-4">
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                            <div>
-                                <label for="mechId" class="custom-label"><i class="fa-solid fa-hashtag"></i>Mech_id</label>
-                                <input type="number" class="form-control fw-bold text-primary font-monospace" id="mechId" placeholder="e.g. 1" required>
-                            </div>
+            <form method="post" action="/Admin/AddMechanic">
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-regular fa-user"></i> Name</label>
+                            <input type="text" name="Mech_Name" class="form-control" placeholder="Full name" required>
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                            <div>
-                                <label for="mechName" class="custom-label"><i class="fa-regular fa-user"></i>Mech_Name</label>
-                                <input type="text" class="form-control fw-bold text-dark" id="mechName" placeholder="Full name..." required>
-                            </div>
+                        <div class="col-md-6">
+                            <label class="custom-label"><i class="fa-solid fa-phone"></i> Contact</label>
+                            <input type="text" name="Mech_Contact" class="form-control" placeholder="Phone number" required>
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                            <div>
-                                <label for="mechContact" class="custom-label"><i class="fa-solid fa-phone"></i>Mech_Contact</label>
-                                <input type="number" class="form-control" id="mechContact" placeholder="1234567890" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                            <div>
-                                <label for="mechStatus" class="custom-label"><i class="fa-solid fa-toggle-on"></i>Status</label>
-                                <select class="form-select fw-bold text-dark" id="mechStatus" required>
-                                    <option value="Available" selected>Available</option>
-                                    <option value="On Job">On Job</option>
-                                    <option value="Off Duty">Off Duty</option>
-                                </select>
-                            </div>
+                        <div class="col-12">
+                            <label class="custom-label"><i class="fa-solid fa-toggle-on"></i> Status</label>
+                            <select name="Status" class="form-select fw-bold">
+                                <option value="Available">Available</option>
+                                <option value="On Job">On Job</option>
+                                <option value="Off Duty">Off Duty</option>
+                            </select>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer border-0 pb-4 pt-2">
-                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold me-2" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-animated rounded-pill px-5"><i class="fa-solid fa-check me-2"></i> Register Profile</button>
-            </div>
+                </div>
+                <div class="modal-footer border-0 pb-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-animated rounded-pill px-5">
+                        <i class="fa-solid fa-check me-2"></i> Save
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="editMechanicModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-            <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center fs-4">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
-                        <i class="fa-solid fa-user-pen"></i>
-                    </div>
-                    Edit Specialist
-                </h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <div class="modal-body p-4 pt-4">
-                <form>
-                    <div class="row g-4">
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                            <div>
-                                <label for="editMechId" class="custom-label"><i class="fa-solid fa-hashtag"></i>Mech_id</label>
-                                <input type="number" class="form-control fw-bold text-primary font-monospace bg-light" id="editMechId" value="1" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                            <div>
-                                <label for="editMechName" class="custom-label"><i class="fa-regular fa-user"></i>Mech_Name</label>
-                                <input type="text" class="form-control fw-bold text-dark" id="editMechName" value="David Miller" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                            <div>
-                                <label for="editMechContact" class="custom-label"><i class="fa-solid fa-phone"></i>Mech_Contact</label>
-                                <input type="number" class="form-control" id="editMechContact" value="1234567890" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                            <div>
-                                <label for="editMechStatus" class="custom-label"><i class="fa-solid fa-toggle-on"></i>Status</label>
-                                <select class="form-select fw-bold text-dark" id="editMechStatus" required>
-                                    <option value="Available">Available</option>
-                                    <option value="On Job" selected>On Job</option>
-                                    <option value="Off Duty">Off Duty</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer border-0 pb-4 pt-2">
-                <button type="button" class="btn btn-light rounded-pill px-4 fw-bold me-2" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary rounded-pill px-5 shadow-sm hover-elevate"><i class="fa-solid fa-check me-2"></i> Save Changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;}
-    .text-sm { font-size: 0.875rem; }
-</style>

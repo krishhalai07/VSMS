@@ -1,3 +1,4 @@
+@model List<VSMS.Models.Customer>
 @{
     ViewData["Title"] = "Customers";
     Layout = "~/Views/Admin/_Layout.cshtml";
@@ -6,344 +7,143 @@
 <div class="d-flex justify-content-between align-items-center mb-5">
     <div>
         <h1 class="page-header mb-1">Customer Directory</h1>
-        <p class="text-muted"><i class="fa-solid fa-users me-2 text-primary"></i>Manage your entire client base and records</p>
+        <p class="text-muted"><i class="fa-solid fa-users me-2 text-primary"></i>Registered customer accounts</p>
     </div>
-
 </div>
 
+@if (TempData["Toast"] != null)
+{
+    <div class="alert alert-success rounded-3 py-2 mb-4"><i class="fa-solid fa-circle-check me-2"></i>@TempData["Toast"]</div>
+}
+
 <div class="card-clean mb-5 p-0">
-    <div class="d-flex justify-content-between align-items-center p-4 border-bottom border-light">
-        <div class="search-bar d-flex align-items-center bg-light border" style="width: 350px;">
+    <div class="p-4 border-bottom border-light">
+        <div class="search-bar d-flex align-items-center bg-light border" style="width:350px;">
             <i class="fa-solid fa-search text-muted me-2"></i>
             <input type="text" placeholder="Search customers..." class="bg-transparent border-0 w-100 outline-none">
         </div>
-        <button class="btn btn-outline-secondary rounded-pill px-4 fw-medium"><i class="fa-solid fa-filter me-2 text-primary"></i>Filter View</button>
     </div>
-
-    <div class="table-responsive p-0">
-        <table class="table table-hover table-custom mb-0 align-middle">
-            <thead class="bg-light text-muted text-uppercase fw-bold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="bg-light text-muted text-uppercase fw-bold" style="font-size:0.8rem;letter-spacing:0.5px;">
                 <tr>
-                    <th class="ps-5 py-3 border-0">Client Identity</th>
-                    <th class="py-3 border-0">Email Address</th>
-                    <th class="py-3 border-0">Contact Number</th>
+                    <th class="ps-5 py-3 border-0">ID</th>
+                    <th class="py-3 border-0">Name</th>
+                    <th class="py-3 border-0">Email</th>
+                    <th class="py-3 border-0">Contact</th>
                     <th class="text-center pe-5 py-3 border-0">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Customer 1 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4">
-                        <div class="d-flex align-items-center">
-                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=e0e7ff&color=4338ca&bold=true" class="rounded-circle shadow-sm me-3" width="48" height="48">
-                            <div>
-                                <h6 class="mb-0 fw-bold">John Doe</h6>
-                                <small class="text-muted fw-medium font-monospace">#CUST-01</small>
+                @foreach (var c in Model)
+                {
+                    <tr class="border-bottom text-dark">
+                        <td class="ps-5 py-3 fw-bold text-primary font-monospace">#@c.Customer_id</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://ui-avatars.com/api/?name=@Uri.EscapeDataString(c.Name ?? "?")&background=e0e7ff&color=4338ca&bold=true"
+                                     class="rounded-circle shadow-sm me-3" width="40" height="40">
+                                <span class="fw-bold">@c.Name</span>
                             </div>
-                        </div>
-                    </td>
-                    <td><span class="text-muted fw-medium"><i class="fa-solid fa-envelope me-2 text-muted"></i>john.doe@email.com</span></td>
-                    <td><span class="fw-bold text-dark"><i class="fa-solid fa-phone me-2 text-secondary"></i>1234567890</span></td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#viewCustomerModal-1" title="View Client Details" style="width: 38px; height: 38px;"><i class="fa-solid fa-eye"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Client" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-                
-                <!-- Customer 2 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4">
-                        <div class="d-flex align-items-center">
-                            <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=fce7f3&color=ec4899&bold=true" class="rounded-circle shadow-sm me-3" width="48" height="48">
-                            <div>
-                                <h6 class="mb-0 fw-bold">Jane Smith</h6>
-                                <small class="text-muted fw-medium font-monospace">#CUST-02</small>
-                            </div>
-                        </div>
-                    </td>
-                    <td><span class="text-muted fw-medium"><i class="fa-solid fa-envelope me-2 text-muted"></i>jane.smith@email.com</span></td>
-                    <td><span class="fw-bold text-dark"><i class="fa-solid fa-phone me-2 text-secondary"></i>9876543210</span></td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#viewCustomerModal-2" title="View Client Details" style="width: 38px; height: 38px;"><i class="fa-solid fa-eye"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Client" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-
-                <!-- Customer 3 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4">
-                        <div class="d-flex align-items-center">
-                            <img src="https://ui-avatars.com/api/?name=Robert+Johnson&background=ccfbf1&color=0f766e&bold=true" class="rounded-circle shadow-sm me-3" width="48" height="48">
-                            <div>
-                                <h6 class="mb-0 fw-bold">Robert Johnson</h6>
-                                <small class="text-muted fw-medium font-monospace">#CUST-03</small>
-                            </div>
-                        </div>
-                    </td>
-                    <td><span class="text-muted fw-medium"><i class="fa-solid fa-envelope me-2 text-muted"></i>robert.j@email.com</span></td>
-                    <td><span class="fw-bold text-dark"><i class="fa-solid fa-phone me-2 text-secondary"></i>5555555555</span></td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#viewCustomerModal-3" title="View Client Details" style="width: 38px; height: 38px;"><i class="fa-solid fa-eye"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Client" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-
-                <!-- Customer 4 -->
-                <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4">
-                        <div class="d-flex align-items-center">
-                            <img src="https://ui-avatars.com/api/?name=Emily+Davis&background=fef3c7&color=b45309&bold=true" class="rounded-circle shadow-sm me-3" width="48" height="48">
-                            <div>
-                                <h6 class="mb-0 fw-bold">Emily Davis</h6>
-                                <small class="text-muted fw-medium font-monospace">#CUST-04</small>
-                            </div>
-                        </div>
-                    </td>
-                    <td><span class="text-muted fw-medium"><i class="fa-solid fa-envelope me-2 text-muted"></i>emily.d@email.com</span></td>
-                    <td><span class="fw-bold text-dark"><i class="fa-solid fa-phone me-2 text-secondary"></i>4444444444</span></td>
-                    <td class="text-center pe-5">
-                        <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate" data-bs-toggle="modal" data-bs-target="#viewCustomerModal-4" title="View Client Details" style="width: 38px; height: 38px;"><i class="fa-solid fa-eye"></i></button>
-                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" title="Delete Client" style="width: 38px; height: 38px;"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
+                        </td>
+                        <td class="text-muted fw-medium">@c.Email</td>
+                        <td class="fw-medium">@c.Contact</td>
+                        <td class="text-center pe-5">
+                            <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm me-2 hover-elevate"
+                                    style="width:38px;height:38px;" title="View Details"
+                                    onclick="showCustomer(@c.Customer_id, '@Html.Raw(c.Name?.Replace("'","\\'")??"")','@c.Email','@c.Contact')">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <form method="post" action="/Admin/DeleteCustomer" class="d-inline"
+                                  onsubmit="return confirm('Delete this customer?')">
+                                <input type="hidden" name="id" value="@c.Customer_id" />
+                                <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm hover-elevate"
+                                        style="width:38px;height:38px;" title="Delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="5" class="text-center text-muted py-5">No customers registered yet.</td></tr>
+                }
             </tbody>
         </table>
     </div>
-    <div class="card-footer bg-light border-0 py-4 d-flex justify-content-between align-items-center px-5 border-radius-bottom">
-        <span class="text-muted fw-medium text-sm">Showing 1 to 2 records</span>
+    <div class="p-4 border-top border-light">
+        <span class="text-muted fw-medium">@Model.Count record(s)</span>
     </div>
 </div>
 
-<!-- View Customer Modal 1 -->
-<div class="modal fade" id="viewCustomerModal-1" tabindex="-1" aria-hidden="true">
+<!-- Single reusable View Modal -->
+<div class="modal fade" id="viewCustomerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0" style="z-index: 1055;">
-            <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center fs-4">
+        <div class="modal-content border-0">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title d-flex align-items-center fs-5 fw-bold">
                     <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
                         <i class="fa-solid fa-address-card"></i>
                     </div>
                     Client Details
                 </h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            
-            <div class="modal-body p-4 pt-4">
-                <div class="text-center mb-4 pb-3 border-bottom border-light">
-                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=e0e7ff&color=4338ca&bold=true&size=100" class="rounded-circle shadow-sm border mb-3" width="80" height="80">
-                    <h4 class="fw-bolder text-dark mb-0">John Doe</h4>
+            <div class="modal-body p-4">
+                <div class="text-center mb-4 pb-3 border-bottom">
+                    <img id="modal-avatar" src="" class="rounded-circle shadow mb-3" width="80" height="80">
+                    <h5 class="fw-bolder text-dark mb-0" id="modal-name"></h5>
+                    <small class="text-muted font-monospace" id="modal-id"></small>
                 </div>
-                
-                <div class="row g-4">
-                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                        <h6 class="custom-label mb-1"><i class="fa-solid fa-hashtag"></i> Customer_id</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0 font-monospace">#CUST-01</p>
-                    </div>
-                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                        <h6 class="custom-label mb-1"><i class="fa-solid fa-phone"></i> Contact</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0">1234567890</p>
-                    </div>
-                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.2s;">
-                        <h6 class="custom-label mb-1"><i class="fa-regular fa-envelope"></i> Email</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0" style="font-size: 1rem !important;">john.doe@email.com</p>
-                    </div>
-                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.3s;">
-                        <h6 class="custom-label mb-2"><i class="fa-solid fa-car-side text-primary"></i> Registered Vehicles</h6>
-                        <div class="d-flex align-items-center p-3 border rounded shadow-sm hover-elevate transition-hover bg-white" style="cursor: pointer;">
-                            <div class="p-2 bg-primary bg-opacity-10 text-primary rounded shadow-sm me-3 border border-primary border-opacity-25">
-                                <i class="fa-solid fa-car"></i>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center p-3 bg-light rounded-3 border">
+                            <div class="text-primary me-3" style="width:36px;text-align:center;">
+                                <i class="fa-regular fa-envelope fs-5"></i>
                             </div>
                             <div>
-                                <h6 class="mb-0 fw-bold text-dark">Toyota Camry</h6>
-                                <p class="mb-0 text-muted fw-bold text-sm font-monospace">ABC-1234 &bull; 2019</p>
+                                <div class="text-muted fw-semibold" style="font-size:0.75rem;text-transform:uppercase;">Email Address</div>
+                                <div class="fw-bold text-dark" id="modal-email"></div>
                             </div>
-                            <div class="ms-auto">
-                                <i class="fa-solid fa-chevron-right text-muted"></i>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex align-items-center p-3 bg-light rounded-3 border">
+                            <div class="text-success me-3" style="width:36px;text-align:center;">
+                                <i class="fa-solid fa-phone fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted fw-semibold" style="font-size:0.75rem;text-transform:uppercase;">Contact Number</div>
+                                <div class="fw-bold text-dark" id="modal-contact"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer border-0 pb-4 pt-2 justify-content-center">
-                <button type="button" class="btn btn-animated rounded-pill px-5" data-bs-dismiss="modal">Close Details</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- View Customer Modal 2 -->
-<div class="modal fade" id="viewCustomerModal-2" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0" style="z-index: 1055;">
-            <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center fs-4">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
-                        <i class="fa-solid fa-address-card"></i>
-                    </div>
-                    Client Details
-                </h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <div class="modal-body p-4 pt-4">
-                <div class="text-center mb-4 pb-3 border-bottom border-light">
-                    <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=fce7f3&color=ec4899&bold=true&size=100" class="rounded-circle shadow-sm border mb-3" width="80" height="80">
-                    <h4 class="fw-bolder text-dark mb-0">Jane Smith</h4>
-                </div>
-                
-                <div class="row g-4">
-                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                        <h6 class="custom-label mb-1"><i class="fa-solid fa-hashtag"></i> Customer_id</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0 font-monospace">#CUST-02</p>
-                    </div>
-                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                        <h6 class="custom-label mb-1"><i class="fa-solid fa-phone"></i> Contact</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0">9876543210</p>
-                    </div>
-                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.2s;">
-                        <h6 class="custom-label mb-1"><i class="fa-regular fa-envelope"></i> Email</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0" style="font-size: 1rem !important;">jane.smith@email.com</p>
-                    </div>
-                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.3s;">
-                        <h6 class="custom-label mb-2"><i class="fa-solid fa-car-side text-primary"></i> Registered Vehicles</h6>
-                        <div class="d-flex align-items-center p-3 border rounded shadow-sm hover-elevate transition-hover bg-white" style="cursor: pointer;">
-                            <div class="p-2 bg-success bg-opacity-10 text-success rounded shadow-sm me-3 border border-success border-opacity-25">
-                                <i class="fa-solid fa-car"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Honda Civic</h6>
-                                <p class="mb-0 text-muted fw-bold text-sm font-monospace">XYZ-9876 &bull; 2021</p>
-                            </div>
-                            <div class="ms-auto">
-                                <i class="fa-solid fa-chevron-right text-muted"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer border-0 pb-4 pt-2 justify-content-center">
-                <button type="button" class="btn btn-animated rounded-pill px-5" data-bs-dismiss="modal">Close Details</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- View Customer Modal 3 -->
-<div class="modal fade" id="viewCustomerModal-3" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0" style="z-index: 1055;">
-            <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center fs-4">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
-                        <i class="fa-solid fa-address-card"></i>
-                    </div>
-                    Client Details
-                </h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <div class="modal-body p-4 pt-4">
-                <div class="text-center mb-4 pb-3 border-bottom border-light">
-                    <img src="https://ui-avatars.com/api/?name=Robert+Johnson&background=ccfbf1&color=0f766e&bold=true&size=100" class="rounded-circle shadow-sm border mb-3" width="80" height="80">
-                    <h4 class="fw-bolder text-dark mb-0">Robert Johnson</h4>
-                </div>
-                
-                <div class="row g-4">
-                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                        <h6 class="custom-label mb-1"><i class="fa-solid fa-hashtag"></i> Customer_id</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0 font-monospace">#CUST-03</p>
-                    </div>
-                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                        <h6 class="custom-label mb-1"><i class="fa-solid fa-phone"></i> Contact</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0">5555555555</p>
-                    </div>
-                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.2s;">
-                        <h6 class="custom-label mb-1"><i class="fa-regular fa-envelope"></i> Email</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0" style="font-size: 1rem !important;">robert.j@email.com</p>
-                    </div>
-                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.3s;">
-                        <h6 class="custom-label mb-2"><i class="fa-solid fa-car-side text-primary"></i> Registered Vehicles</h6>
-                        <div class="d-flex align-items-center p-3 border rounded shadow-sm hover-elevate transition-hover bg-white" style="cursor: pointer;">
-                            <div class="p-2 bg-warning bg-opacity-10 text-warning rounded shadow-sm me-3 border border-warning border-opacity-25">
-                                <i class="fa-solid fa-truck-pickup"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Ford F-150</h6>
-                                <p class="mb-0 text-muted fw-bold text-sm font-monospace">F150-TRK &bull; 2018</p>
-                            </div>
-                            <div class="ms-auto">
-                                <i class="fa-solid fa-chevron-right text-muted"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer border-0 pb-4 pt-2 justify-content-center">
-                <button type="button" class="btn btn-animated rounded-pill px-5" data-bs-dismiss="modal">Close Details</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- View Customer Modal 4 -->
-<div class="modal fade" id="viewCustomerModal-4" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0" style="z-index: 1055;">
-            <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center fs-4">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3">
-                        <i class="fa-solid fa-address-card"></i>
-                    </div>
-                    Client Details
-                </h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <div class="modal-body p-4 pt-4">
-                <div class="text-center mb-4 pb-3 border-bottom border-light">
-                    <img src="https://ui-avatars.com/api/?name=Emily+Davis&background=fef3c7&color=b45309&bold=true&size=100" class="rounded-circle shadow-sm border mb-3" width="80" height="80">
-                    <h4 class="fw-bolder text-dark mb-0">Emily Davis</h4>
-                </div>
-                
-                <div class="row g-4">
-                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
-                        <h6 class="custom-label mb-1"><i class="fa-solid fa-hashtag"></i> Customer_id</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0 font-monospace">#CUST-04</p>
-                    </div>
-                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
-                        <h6 class="custom-label mb-1"><i class="fa-solid fa-phone"></i> Contact</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0">4444444444</p>
-                    </div>
-                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.2s;">
-                        <h6 class="custom-label mb-1"><i class="fa-regular fa-envelope"></i> Email</h6>
-                        <p class="fw-bold text-dark fs-5 mb-0" style="font-size: 1rem !important;">emily.d@email.com</p>
-                    </div>
-                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.3s;">
-                        <h6 class="custom-label mb-2"><i class="fa-solid fa-car-side text-primary"></i> Registered Vehicles</h6>
-                        <div class="d-flex align-items-center p-3 border rounded shadow-sm hover-elevate transition-hover bg-white" style="cursor: pointer;">
-                            <div class="p-2 bg-info bg-opacity-10 text-info rounded shadow-sm me-3 border border-info border-opacity-25">
-                                <i class="fa-solid fa-bolt"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">Tesla Model 3</h6>
-                                <p class="mb-0 text-muted fw-bold text-sm font-monospace">TSL-M3EV &bull; 2023</p>
-                            </div>
-                            <div class="ms-auto">
-                                <i class="fa-solid fa-chevron-right text-muted"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer border-0 pb-4 pt-2 justify-content-center">
-                <button type="button" class="btn btn-animated rounded-pill px-5" data-bs-dismiss="modal">Close Details</button>
+            <div class="modal-footer border-0 pt-0 pb-4 justify-content-center">
+                <button type="button" class="btn btn-animated rounded-pill px-5" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .hover-elevate:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important; background: white !important;}
-    .border-radius-bottom { border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-    .table-hover tbody tr:hover { background-color: #f8fafc; transform: scale(1.005); box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: all 0.2s; }
+    .table-hover tbody tr:hover { background-color:#f8fafc; }
+    .hover-elevate:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important; background: white !important; }
 </style>
+
+@section Scripts {
+<script>
+    function showCustomer(id, name, email, contact) {
+        document.getElementById('modal-name').textContent    = name;
+        document.getElementById('modal-id').textContent      = '#CUST-' + id;
+        document.getElementById('modal-email').textContent   = email || '—';
+        document.getElementById('modal-contact').textContent = contact || '—';
+        document.getElementById('modal-avatar').src =
+            'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) +
+            '&background=e0e7ff&color=4338ca&bold=true&size=100';
+        new bootstrap.Modal(document.getElementById('viewCustomerModal')).show();
+    }
+</script>
+}

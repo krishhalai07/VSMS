@@ -1,0 +1,17 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="card-clean p-5 text-center">
+    <i class="fa-solid fa-triangle-exclamation text-danger mb-3" style="font-size:3rem;"></i>
+    <h3 class="fw-bold text-dark mb-2">Something went wrong</h3>
+    @if (Model?.ShowRequestId == true)
+    {
+        <p class="text-muted">Request ID: <code>@Model.RequestId</code></p>
+    }
+    <a href="/Admin/Dashboard" class="btn btn-animated rounded-pill px-5 mt-3">
+        <i class="fa-solid fa-house me-2"></i> Back to Dashboard
+    </a>
+</div>
