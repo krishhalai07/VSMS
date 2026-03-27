@@ -25,11 +25,13 @@
         <table class="table table-hover table-custom mb-0 align-middle">
             <thead class="bg-light text-muted text-uppercase fw-bold" style="font-size: 0.8rem; letter-spacing: 0.5px;">
                 <tr>
-                    <th class="ps-5 py-3 border-0">License Plate</th>
-                    <th class="py-3 border-0">Manufacturer & Model</th>
-                    <th class="py-3 border-0">Owner</th>
+                    <th class="ps-5 py-3 border-0">Vech_id</th>
+                    <th class="py-3 border-0">RegId</th>
+                    <th class="py-3 border-0">Car_Name</th>
+                    <th class="py-3 border-0">Car_Model</th>
+                    <th class="py-3 border-0">Owner_Name</th>
                     <th class="py-3 border-0">Year</th>
-                    <th class="py-3 border-0">Last Service</th>
+                    <th class="py-3 border-0">Owner_contact</th>
                     <th class="py-3 border-0">Status</th>
                     <th class="text-center pe-5 py-3 border-0">Actions</th>
                 </tr>
@@ -37,18 +39,20 @@
             <tbody>
                 <!-- Vehicle 1 -->
                 <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">ABC-1234</td>
-                    <td>
-                        <div class="d-flex align-items-center fw-bold">
+                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">1</td>
+                    <td class="text-muted fw-bold font-monospace">10101</td>
+                    <td class="fw-bold text-dark">
+                        <div class="d-flex align-items-center">
                             <div class="p-2 bg-primary bg-opacity-10 text-primary rounded shadow-sm me-3 border border-primary border-opacity-25">
                                 <i class="fa-solid fa-car-side"></i>
                             </div>
-                            Toyota Camry
+                            Toyota
                         </div>
                     </td>
+                    <td class="fw-medium text-secondary">Camry</td>
                     <td class="fw-medium text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>John Doe</td>
                     <td class="text-muted fw-bold">2019</td>
-                    <td class="text-muted fw-medium">12 Oct, 2023</td>
+                    <td class="text-muted fw-medium font-monospace"><i class="fa-solid fa-phone me-2 text-secondary"></i>1234567890</td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-sm fw-bold border-0 shadow-sm bg-success bg-opacity-10 text-success dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 130px; border-radius: 8px;">
@@ -69,18 +73,20 @@
                 
                 <!-- Vehicle 2 -->
                 <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">XYZ-9876</td>
-                    <td>
-                        <div class="d-flex align-items-center fw-bold">
+                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">2</td>
+                    <td class="text-muted fw-bold font-monospace">98765</td>
+                    <td class="fw-bold text-dark">
+                        <div class="d-flex align-items-center">
                             <div class="p-2 bg-success bg-opacity-10 text-success rounded shadow-sm me-3 border border-success border-opacity-25">
                                 <i class="fa-solid fa-car-side"></i>
                             </div>
-                            Honda Civic
+                            Honda
                         </div>
                     </td>
+                    <td class="fw-medium text-secondary">Civic</td>
                     <td class="fw-medium text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>Jane Smith</td>
                     <td class="text-muted fw-bold">2021</td>
-                    <td class="text-muted fw-medium">05 Nov, 2023</td>
+                    <td class="text-muted fw-medium font-monospace"><i class="fa-solid fa-phone me-2 text-secondary"></i>9876543210</td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-sm fw-bold border-0 shadow-sm bg-success bg-opacity-10 text-success dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 130px; border-radius: 8px;">
@@ -101,18 +107,20 @@
 
                 <!-- Vehicle 3 -->
                 <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">F150-TRK</td>
-                    <td>
-                        <div class="d-flex align-items-center fw-bold">
+                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">3</td>
+                    <td class="text-muted fw-bold font-monospace">15015</td>
+                    <td class="fw-bold text-dark">
+                        <div class="d-flex align-items-center">
                             <div class="p-2 bg-warning bg-opacity-10 text-warning rounded shadow-sm me-3 border border-warning border-opacity-25">
                                 <i class="fa-solid fa-truck-pickup"></i>
                             </div>
-                            Ford F-150
+                            Ford
                         </div>
                     </td>
+                    <td class="fw-medium text-secondary">F-150</td>
                     <td class="fw-medium text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>Robert Johnson</td>
                     <td class="text-muted fw-bold">2018</td>
-                    <td class="text-muted fw-medium">22 Dec, 2023</td>
+                    <td class="text-muted fw-medium font-monospace"><i class="fa-solid fa-phone me-2 text-secondary"></i>5555555555</td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-sm fw-bold border-0 shadow-sm bg-danger bg-opacity-10 text-danger dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 130px; border-radius: 8px;">
@@ -133,18 +141,20 @@
 
                 <!-- Vehicle 4 -->
                 <tr class="border-bottom text-dark">
-                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">TSL-M3EV</td>
-                    <td>
-                        <div class="d-flex align-items-center fw-bold">
+                    <td class="ps-5 py-4 fw-bold text-primary font-monospace fs-5">4</td>
+                    <td class="text-muted fw-bold font-monospace">30003</td>
+                    <td class="fw-bold text-dark">
+                        <div class="d-flex align-items-center">
                             <div class="p-2 bg-info bg-opacity-10 text-info rounded shadow-sm me-3 border border-info border-opacity-25">
                                 <i class="fa-solid fa-bolt"></i>
                             </div>
-                            Tesla Model 3
+                            Tesla
                         </div>
                     </td>
+                    <td class="fw-medium text-secondary">Model 3</td>
                     <td class="fw-medium text-dark"><i class="fa-regular fa-user me-2 text-muted"></i>Emily Davis</td>
                     <td class="text-muted fw-bold">2023</td>
-                    <td class="text-muted fw-medium">10 Jan, 2024</td>
+                    <td class="text-muted fw-medium font-monospace"><i class="fa-solid fa-phone me-2 text-secondary"></i>4444444444</td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-sm fw-bold border-0 shadow-sm bg-success bg-opacity-10 text-success dropdown-toggle d-flex justify-content-between align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 130px; border-radius: 8px;">
@@ -184,40 +194,46 @@
             <div class="modal-body p-4 pt-4">
                 <form>
                     <div class="row g-4">
-                        <div class="col-12" style="animation: slideUpFade 0.4s both 0.1s;">
+                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
                             <div>
-                                <label for="licensePlate" class="custom-label"><i class="fa-solid fa-barcode"></i>License Plate</label>
-                                <input type="text" class="form-control text-uppercase font-monospace fw-bold text-primary" id="licensePlate" placeholder="XXX-0000" style="letter-spacing:1px;" required>
+                                <label for="vechId" class="custom-label"><i class="fa-solid fa-hashtag"></i>Vech_id</label>
+                                <input type="number" class="form-control font-monospace fw-bold text-primary" id="vechId" placeholder="e.g. 1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.1s;">
+                            <div>
+                                <label for="regId" class="custom-label"><i class="fa-solid fa-barcode"></i>RegId</label>
+                                <input type="number" class="form-control font-monospace text-dark fw-medium" id="regId" placeholder="e.g. 10101" required>
                             </div>
                         </div>
                         <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
                             <div>
-                                <label for="manufacturer" class="custom-label"><i class="fa-solid fa-industry"></i>Manufacturer</label>
-                                <select class="form-select fw-bold text-dark" id="manufacturer" required>
-                                    <option value="" selected disabled>Select Make...</option>
-                                    <option value="Toyota">Toyota</option>
-                                </select>
+                                <label for="carName" class="custom-label"><i class="fa-solid fa-industry"></i>Car_Name</label>
+                                <input type="text" class="form-control text-dark fw-medium" id="carName" placeholder="e.g. Toyota" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.2s;">
+                            <div>
+                                <label for="carModel" class="custom-label"><i class="fa-solid fa-car-rear"></i>Car_Model</label>
+                                <input type="text" class="form-control text-dark fw-medium" id="carModel" placeholder="e.g. Camry" required>
                             </div>
                         </div>
                         <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
                             <div>
-                                <label for="model" class="custom-label"><i class="fa-solid fa-car-rear"></i>Model</label>
-                                <input type="text" class="form-control" id="model" placeholder="Model name" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.4s;">
-                            <div>
                                 <label for="year" class="custom-label"><i class="fa-regular fa-calendar-days"></i>Year</label>
-                                <input type="number" class="form-control" id="year" placeholder="2023" min="1990" max="2025" required>
+                                <input type="number" class="form-control text-dark fw-medium" id="year" placeholder="2019" required>
                             </div>
                         </div>
-                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.5s;">
+                        <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
                             <div>
-                                <label for="clientLink" class="custom-label"><i class="fa-regular fa-user"></i>Owner Client</label>
-                                <select class="form-select fw-medium text-dark" id="clientLink" required>
-                                    <option value="" selected disabled>Select Owner...</option>
-                                    <option value="1">John Doe (CST-001)</option>
-                                </select>
+                                <label for="ownerName" class="custom-label"><i class="fa-regular fa-user"></i>Owner_Name</label>
+                                <input type="text" class="form-control text-dark fw-medium" id="ownerName" placeholder="e.g. John Doe" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="animation: slideUpFade 0.4s both 0.4s;">
+                            <div>
+                                <label for="ownerContact" class="custom-label"><i class="fa-solid fa-phone"></i>Owner_contact</label>
+                                <input type="number" class="form-control font-monospace text-dark fw-medium" id="ownerContact" placeholder="e.g. 1234567890" required>
                             </div>
                         </div>
                     </div>
