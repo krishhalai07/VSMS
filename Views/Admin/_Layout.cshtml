@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VSMS Core</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --surface: #ffffff;
+            --surface-border: #e2e8f0;
+            --primary: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary: #0ea5e9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Sidebar UI */
+        #sidebar {
+            min-width: 280px;
+            max-width: 280px;
+            min-height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--surface-border);
+            box-shadow: 0 0 20px rgba(0,0,0,0.02);
+            position: fixed;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .brand-section {
+            padding: 25px;
+            border-bottom: 1px solid var(--surface-border);
+            display: flex;
+            align-items: center;
+        }
+        
+        .brand-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 15px;
+            animation: bounce-icon 2s infinite ease-in-out alternate;
+        }
+
+        @@keyframes bounce-icon {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-4px); }
+        }
+
+        .nav-links {
+            padding: 20px 15px;
+            list-style: none;
+        }
+        
+        .nav-item { margin-bottom: 6px; }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .nav-link i {
+            width: 26px;
+            font-size: 1.25rem;
+            margin-right: 12px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+            transform: translateX(6px);
+        }
+        .nav-link:hover i { transform: scale(1.2) rotate(-5deg); color: var(--primary); }
+
+        .nav-item.active .nav-link {
+            color: white;
+            background: linear-gradient(135deg, var(--primary), #6366f1);
+            box-shadow: 0 8px 15px rgba(67, 56, 202, 0.25);
+            font-weight: 600;
+        }
+        .nav-item.active .nav-link i { color: white; }
+
+        /* Main Context */
+        #content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Top Navbar */
+        .top-navbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--surface-border);
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar {
+            background: var(--bg-color);
+            border: 1px solid transparent;
+            border-radius: 50px;
+            padding: 10px 25px;
+            color: var(--text-main);
+            width: 350px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .search-bar:focus-within {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+            width: 400px;
+        }
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            outline: none;
+            width: 100%;
+            font-weight: 500;
+        }
+        .search-bar input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+
+
+        .card-clean {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: zoomInFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card-clean:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
+            border-color: #cbd5e1;
+        }
+
+        @@keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @@keyframes zoomInFade {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Staggered card animations */
+        .row > div:nth-child(1) .card-clean { animation-delay: 0.1s; }
+        .row > div:nth-child(2) .card-clean { animation-delay: 0.2s; }
+        .row > div:nth-child(3) .card-clean { animation-delay: 0.3s; }
+        .row > div:nth-child(4) .card-clean { animation-delay: 0.4s; }
+
+        .page-header {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 0;
+            letter-spacing: -1px;
+        }
+
+        /* Standard Form Styles */
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            background: #f8fafc;
+            color: #0f172a;
+            font-weight: 500;
+            padding: 12px 16px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: none;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 8px 15px var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .custom-label {
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        
+        .custom-label i {
+            margin-right: 6px;
+        }
+
+        /* Animated Buttons */
+        .btn-animated {
+            background: linear-gradient(135deg, var(--primary), #6366f1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 15px rgba(67, 56, 202, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-animated i {
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-animated:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(67, 56, 202, 0.4);
+            color: white;
+        }
+        
+        .btn-animated:hover i {
+            transform: translateX(4px);
+        }
+
+        .btn-animated:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(67, 56, 202, 0.3);
+        }
+
+        /* Modals */
+        .modal-content {
+            background: var(--surface);
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+        .modal.fade .modal-dialog {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(0.8) translateY(30px);
+        }
+        .modal.show .modal-dialog { transform: scale(1) translateY(0); }
+        .modal-header { border-bottom: 1px solid #f1f5f9; padding: 25px 30px; }
+        .modal-title { font-weight: 700; color: var(--text-main); }
+        .modal-footer { border-top: 1px solid #f1f5f9; padding: 20px 30px; background: #f8fafc; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="brand-section">
+            <i class="fa-solid fa-car-burst brand-icon"></i>
+            <div>
+                <h4 class="mb-0 fw-bold text-dark" style="letter-spacing: -0.5px;">VSMS<span class="text-primary"> Pro</span></h4>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")">
+                <a href="@Url.Action("Dashboard", "Admin")" class="nav-link"><i class="fa-solid fa-cube"></i> Dashboard</a>
+            </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "Customers" ? "active" : "")">
+                <a href="@Url.Action("Customers", "Admin")" class="nav-link"><i class="fa-solid fa-users"></i> Customers</a>
+            </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "Vehicles" ? "active" : "")">
+                <a href="@Url.Action("Vehicles", "Admin")" class="nav-link"><i class="fa-solid fa-car-side"></i> Vehicles</a>
+            </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "Mechanics" ? "active" : "")">
+                <a href="@Url.Action("Mechanics", "Admin")" class="nav-link"><i class="fa-solid fa-wrench"></i> Mechanics</a>
+            </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "JobCards" ? "active" : "")">
+                <a href="@Url.Action("JobCards", "Admin")" class="nav-link"><i class="fa-solid fa-clipboard-check"></i> Job Cards</a>
+            </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "ServiceManagement" ? "active" : "")">
+                <a href="@Url.Action("ServiceManagement", "Admin")" class="nav-link"><i class="fa-solid fa-gears"></i> Services</a>
+            </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "Billing" ? "active" : "")">
+                <a href="@Url.Action("Billing", "Admin")" class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+            </li>
+            <li class="nav-item @(ViewContext.RouteData.Values["Action"]?.ToString() == "Reports" ? "active" : "")">
+                <a href="@Url.Action("Reports", "Admin")" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Reports</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content">
+        <!-- Top Navbar -->
+        <nav class="d-flex justify-content-between align-items-center top-navbar">
+            <div class="search-bar d-flex align-items-center">
+                <i class="fa-solid fa-search text-muted me-2"></i>
+                <input type="text" placeholder="Search anything...">
+            </div>
+
+            <div class="d-flex align-items-center gap-4">
+                <div class="position-relative" style="cursor: pointer; transition: 0.3s;" onmouseover="this.style.transform='scale(1.1) rotate(10deg)'" onmouseout="this.style.transform='scale(1) rotate(0deg)'">
+                    <i class="fa-regular fa-bell fs-5 text-secondary"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-white rounded-circle"></span>
+                </div>
+                
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle p-1 pe-3 rounded-pill bg-light border" data-bs-toggle="dropdown" style="transition: all 0.3s;">
+                        <img src="https://ui-avatars.com/api/?name=Admin+Profile&background=4338ca&color=fff&bold=true" class="rounded-circle me-2 shadow-sm" width="38" height="38">
+                        <span class="text-dark fw-bold me-1">Admin Profile</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end mt-2 p-2 shadow border-0 rounded-4" style="min-width: 200px; animation: slideUpFade 0.3s ease;">
+                        <li><a class="dropdown-item py-2 rounded mb-1 fw-bold" href="@Url.Action("Profile", "Admin")"><i class="fa-solid fa-user me-2 text-primary"></i> My Profile</a></li>
+                        <li><a class="dropdown-item py-2 rounded mb-1 fw-medium text-muted" href="#"><i class="fa-solid fa-gear me-2"></i> Settings</a></li>
+                        <li><hr class="dropdown-divider opacity-10"></li>
+                        <li><a class="dropdown-item text-danger fw-bold rounded py-2" href="/Admin/Login"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid p-4" style="max-width: 1600px; position: relative;">
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Global Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 text-center p-4">
+                <div class="mb-3 d-flex justify-content-center">
+                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fa-solid fa-triangle-exclamation fs-1"></i>
+                    </div>
+                </div>
+                <h4 class="fw-bolder text-dark mb-2">Confirm Deletion</h4>
+                <p class="text-muted text-sm mb-4">Are you sure you want to delete this record? This action cannot be undone.</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" data-bs-dismiss="modal" onclick="showToast('Record deleted successfully!', 'danger')">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-4" style="z-index: 1060;">
+        <div id="globalToast" class="toast align-items-center text-bg-primary border-0 shadow-lg form-control" style="border-radius:12px;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+            <div class="d-flex">
+                <div class="toast-body fw-bold d-flex align-items-center">
+                    <i class="fa-solid fa-circle-check me-2 fs-5" id="toastIcon"></i>
+                    <span id="toastMessage">Action completed successfully.</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Logic -->
+    <script>
+        function showToast(message, type = 'primary') {
+            const toastEl = document.getElementById('globalToast');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMsg.textContent = message;
+            
+            toastEl.className = `toast align-items-center text-bg-${type} border-0 shadow-lg`;
+            toastEl.style.borderRadius = "12px";
+            
+            if(type === 'danger') toastIcon.className = 'fa-solid fa-trash-can me-2 fs-5';
+            else if(type === 'success') toastIcon.className = 'fa-solid fa-circle-check me-2 fs-5';
+            else if(type === 'primary') toastIcon.className = 'fa-solid fa-bell me-2 fs-5';
+            else toastIcon.className = 'fa-solid fa-circle-info me-2 fs-5';
+            
+            if(window.bootstrap) {
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+        }
+    </script>
+
+    <!-- Bootstrap & jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .dropdown-item:hover { background: #f1f5f9; color: var(--primary) !important; transform: translateX(5px); transition: all 0.2s; }
+    </style>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

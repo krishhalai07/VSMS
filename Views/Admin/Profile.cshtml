@@ -1,0 +1,149 @@
+@{
+    ViewData["Title"] = "Admin Profile";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="row g-4 mb-5">
+    <!-- Left panel: Profile Badge -->
+    <div class="col-12 col-xl-4">
+        <div class="card-clean text-center d-flex flex-column align-items-center pt-5 pb-4 px-4 h-100">
+            <div class="position-relative mb-4" style="animation: zoomInFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
+                <div class="rounded-circle p-2 bg-white shadow-lg" style="border: 2px solid var(--surface-border);">
+                    <img src="https://ui-avatars.com/api/?name=Admin+Profile&background=4338ca&color=fff&bold=true&size=140" class="rounded-circle" alt="Admin Profile">
+                </div>
+                <div class="position-absolute bottom-0 end-0 p-2 bg-success rounded-circle border border-white" style="border-width: 4px !important; box-shadow: 0 4px 10px rgba(16,185,129,0.3);"></div>
+            </div>
+            
+            <h3 class="fw-bolder mb-1 text-dark">System Administrator</h3>
+            <p class="text-primary fw-bold letter-spacing-1 mb-4"><i class="fa-solid fa-shield-halved me-2"></i>SUPREME COMMANDER</p>
+
+            <div class="d-flex justify-content-center gap-3 w-100 mb-5">
+                <button class="btn btn-animated flex-fill"><i class="fa-solid fa-camera me-2"></i> Change photo</button>
+            </div>
+
+            <div class="w-100 text-start bg-light rounded-4 p-4 border shadow-sm">
+                <h6 class="text-muted text-uppercase fw-bold letter-spacing-1 mb-3">Contact Information</h6>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 rounded-circle bg-white shadow-sm border me-3 text-primary" style="width: 40px; height: 40px; display: flex; align-items:center; justify-content:center;"><i class="fa-solid fa-envelope"></i></div>
+                    <div><span class="text-muted text-sm d-block fw-medium">Email Address</span><span class="fw-bold text-dark">admin@vsms.local</span></div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-2 rounded-circle bg-white shadow-sm border me-3 text-success" style="width: 40px; height: 40px; display: flex; align-items:center; justify-content:center;"><i class="fa-solid fa-phone"></i></div>
+                    <div><span class="text-muted text-sm d-block fw-medium">Phone Number</span><span class="fw-bold text-dark">+1 (555) 123-4567</span></div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="p-2 rounded-circle bg-white shadow-sm border me-3 text-warning" style="width: 40px; height: 40px; display: flex; align-items:center; justify-content:center;"><i class="fa-solid fa-location-dot"></i></div>
+                    <div><span class="text-muted text-sm d-block fw-medium">Location</span><span class="fw-bold text-dark">Corporate Headquarters</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right panel: Interactive Form Updates -->
+    <div class="col-12 col-xl-8">
+        <div class="card-clean p-5 mb-4" style="animation-delay: 0.2s;">
+            <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+                <i class="fa-solid fa-user-pen fs-3 text-primary me-3"></i>
+                <div>
+                    <h4 class="fw-bold mb-0 text-dark">Edit Profile Details</h4>
+                    <p class="text-muted mb-0">Update your personal information and settings</p>
+                </div>
+            </div>
+            
+            <form>
+                <div class="row g-4">
+                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.3s;">
+                        <div>
+                            <label for="f_name" class="custom-label">First Name</label>
+                            <input type="text" class="form-control" id="f_name" placeholder="John" value="System">
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.4s;">
+                        <div>
+                            <label for="l_name" class="custom-label">Last Name</label>
+                            <input type="text" class="form-control" id="l_name" placeholder="Doe" value="Administrator">
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.5s;">
+                        <div>
+                            <label for="email" class="custom-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" placeholder="example@domain.com" value="admin@vsms.local">
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.6s;">
+                        <div>
+                            <label for="phone" class="custom-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="(555) 000-0000" value="+1 (555) 123-4567">
+                        </div>
+                    </div>
+                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.7s;">
+                        <div>
+                            <label for="bio" class="custom-label">Short Bio / Description</label>
+                            <textarea class="form-control" placeholder="Tell us about yourself..." id="bio" style="height: 100px;">Maintained 99.9% uptime over the past 3 years.</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 text-end mt-5 border-top pt-4">
+                        <button type="button" class="btn btn-light border fw-bold px-4 py-2 me-2 hover-elevate rounded-12">Discard Changes</button>
+                        <button type="button" class="btn btn-animated"><i class="fa-solid fa-check me-2"></i> Save Profile</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="card-clean p-5 mb-4" style="animation-delay: 0.25s;">
+            <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+                <i class="fa-solid fa-key fs-3 text-warning me-3"></i>
+                <div>
+                    <h4 class="fw-bold mb-0 text-dark">Change Password</h4>
+                    <p class="text-muted mb-0">Ensure your account is using a long, random password to stay secure</p>
+                </div>
+            </div>
+            
+            <form>
+                <div class="row g-4">
+                    <div class="col-12" style="animation: slideUpFade 0.4s both 0.3s;">
+                        <div>
+                            <label for="current_pw" class="custom-label">Current Password</label>
+                            <input type="password" class="form-control" id="current_pw" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.4s;">
+                        <div>
+                            <label for="new_pw" class="custom-label">New Password</label>
+                            <input type="password" class="form-control" id="new_pw" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="animation: slideUpFade 0.4s both 0.5s;">
+                        <div>
+                            <label for="confirm_pw" class="custom-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirm_pw" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3" style="animation: slideUpFade 0.4s both 0.6s;">
+                        <h6 class="fw-bold text-dark text-sm mb-2">Password Requirements:</h6>
+                        <ul class="text-muted text-sm mb-0 ps-3">
+                            <li class="mb-1">Minimum 8 characters long - the more, the better</li>
+                            <li class="mb-1">At least one lowercase & one uppercase character</li>
+                            <li>At least one number, symbol, or whitespace character</li>
+                        </ul>
+                    </div>
+                    <div class="col-12 text-end mt-4">
+                        <button type="button" class="btn btn-animated" onclick="showToast('Password successfully updated!', 'success')"><i class="fa-solid fa-lock me-2"></i> Update Password</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+</div>
+
+<style>
+    .letter-spacing-1 { letter-spacing: 1px; }
+    .text-sm { font-size: 0.85rem; }
+    .rounded-12 { border-radius: 12px; }
+    .hover-elevate:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .transition-hover { transition: all 0.3s ease; border-color: transparent; }
+    .transition-hover:hover { background: white !important; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-color: var(--surface-border) !important; transform: translateY(-2px); }
+</style>
