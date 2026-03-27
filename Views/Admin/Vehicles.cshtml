@@ -149,44 +149,51 @@
                 </h5>
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="/Admin/AddVehicle">
+            <form method="post" action="/Admin/AddVehicle" id="vehicleForm" novalidate>
                 <div class="modal-body p-4">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-solid fa-barcode"></i> Number Plate</label>
-                            <input type="text" name="RegId" class="form-control font-monospace fw-bold text-uppercase"
+                            <input type="text" name="RegId" id="vRegId" class="form-control font-monospace fw-bold text-uppercase"
                                    placeholder="e.g. MH12AB1234" maxlength="20"
                                    oninput="this.value=this.value.toUpperCase()">
+                            <small class="text-danger fw-medium d-none" id="err-vRegId"></small>
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-solid fa-industry"></i> Car Name</label>
-                            <input type="text" name="Car_Name" class="form-control" placeholder="Car Name" required>
+                            <input type="text" name="Car_Name" id="vCarName" class="form-control" placeholder="Car Name">
+                            <small class="text-danger fw-medium d-none" id="err-vCarName"></small>
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-solid fa-car-rear"></i> Car Model</label>
-                            <input type="text" name="Car_Model" class="form-control" placeholder="Car Model" required>
+                            <input type="text" name="Car_Model" id="vCarModel" class="form-control" placeholder="Car Model">
+                            <small class="text-danger fw-medium d-none" id="err-vCarModel"></small>
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-regular fa-calendar-days"></i> Year</label>
-                            <input type="number" name="Year" class="form-control" placeholder="2020">
+                            <input type="number" name="Year" id="vYear" class="form-control" placeholder="2020" min="1990" max="2099">
+                            <small class="text-danger fw-medium d-none" id="err-vYear"></small>
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-regular fa-user"></i> Owner Name</label>
-                            <input type="text" name="Owner_Name" class="form-control" placeholder="Owner Name" required>
+                            <input type="text" name="Owner_Name" id="vOwnerName" class="form-control" placeholder="Owner Name">
+                            <small class="text-danger fw-medium d-none" id="err-vOwnerName"></small>
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-solid fa-phone"></i> Owner Contact</label>
-                            <input type="number" name="Owner_contact" class="form-control" placeholder="e.g. 1234567890">
+                            <input type="text" name="Owner_contact" id="vOwnerContact" class="form-control" placeholder="e.g. 1234567890">
+                            <small class="text-danger fw-medium d-none" id="err-vOwnerContact"></small>
                         </div>
                         <div class="col-12">
                             <label class="custom-label"><i class="fa-regular fa-envelope"></i> Owner Email</label>
-                            <input type="email" name="Owner_Email" class="form-control" placeholder="e.g. user@email.com">
+                            <input type="email" name="Owner_Email" id="vOwnerEmail" class="form-control" placeholder="e.g. user@email.com">
+                            <small class="text-danger fw-medium d-none" id="err-vOwnerEmail"></small>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pb-4">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold me-2" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-animated rounded-pill px-5">
+                    <button type="button" class="btn btn-animated rounded-pill px-5" onclick="submitVehicleForm()">
                         <i class="fa-solid fa-check me-2"></i> Save Asset
                     </button>
                 </div>
@@ -209,6 +216,62 @@
             const rect = this.getBoundingClientRect();
             menu.style.top  = (rect.bottom + 4) + 'px';
             menu.style.left = rect.left + 'px';
+        });
+    });
+
+    function vErr(id, errId, msg) {
+        const el = document.getElementById(id);
+        el.style.borderColor = '#dc2626';
+        el.style.boxShadow = '0 0 0 3px rgba(220,38,38,0.12)';
+        const err = document.getElementById(errId);
+        err.textContent = msg; err.classList.remove('d-none');
+    }
+    function vClear(id, errId) {
+        const el = document.getElementById(id);
+        el.style.borderColor = ''; el.style.boxShadow = '';
+        document.getElementById(errId).classList.add('d-none');
+    }
+    function submitVehicleForm() {
+        let ok = true;
+        const fields = [
+            { id:'vCarName',      err:'err-vCarName',      msg:'Car name is required.' },
+            { id:'vCarModel',     err:'err-vCarModel',     msg:'Car model is required.' },
+            { id:'vOwnerName',    err:'err-vOwnerName',    msg:'Owner name is required.' },
+        ];
+        fields.forEach(f => vClear(f.id, f.err));
+        vClear('vYear','err-vYear');
+        vClear('vOwnerContact','err-vOwnerContact');
+        vClear('vOwnerEmail','err-vOwnerEmail');
+
+        fields.forEach(f => {
+            if (!document.getElementById(f.id).value.trim()) {
+                vErr(f.id, f.err, f.msg); ok = false;
+            }
+        });
+        const yr = document.getElementById('vYear').value;
+        if (yr && (parseInt(yr) < 1990 || parseInt(yr) > 2099)) {
+            vErr('vYear','err-vYear','Year must be between 1990 and 2099.'); ok = false;
+        }
+        const contact = document.getElementById('vOwnerContact').value.trim();
+        if (contact && !/^\d{7,15}$/.test(contact)) {
+            vErr('vOwnerContact','err-vOwnerContact','Enter a valid number (7-15 digits).'); ok = false;
+        }
+        const email = document.getElementById('vOwnerEmail').value.trim();
+        if (email && !/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+            vErr('vOwnerEmail','err-vOwnerEmail','Enter a valid email address.'); ok = false;
+        }
+        if (ok) document.getElementById('vehicleForm').submit();
+    }
+    ['vCarName','vCarModel','vOwnerName','vYear','vOwnerContact','vOwnerEmail'].forEach(id => {
+        const errId = 'err-' + id;
+        document.getElementById(id)?.addEventListener('input', () => vClear(id, errId));
+    });
+    document.getElementById('addVehicleModal').addEventListener('hidden.bs.modal', function () {
+        ['vRegId','vCarName','vCarModel','vYear','vOwnerName','vOwnerContact','vOwnerEmail'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.value = ''; el.style.borderColor = ''; el.style.boxShadow = ''; }
+            const err = document.getElementById('err-' + id);
+            if (err) err.classList.add('d-none');
         });
     });
 </script>

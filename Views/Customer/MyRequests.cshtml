@@ -5,7 +5,7 @@
     var vehicles = ViewBag.Vehicles as List<VSMS.Models.Vehicle> ?? new();
 
     // Progress steps order
-    var steps = new[] { "Pending", "Assigned", "In Progress", "Testing", "Completed", "Delivered" };
+    var steps = new[] { "Received", "Assigned", "In Progress", "Testing", "Completed", "Delivered" };
 }
 
 <div class="container py-5">
@@ -273,7 +273,7 @@
 
 @section Scripts {
 <script>
-    const steps = ['Pending','Assigned','In Progress','Testing','Completed','Delivered'];
+    const steps = ['Received','Assigned','In Progress','Testing','Completed','Delivered'];
     const stepIcons = ['fa-clock','fa-user-check','fa-screwdriver-wrench','fa-flask','fa-circle-check','fa-flag-checkered'];
 
     function viewJob(id, plate, car, problem, dateIn, dateOut, mech, status) {

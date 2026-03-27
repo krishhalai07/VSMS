@@ -75,16 +75,18 @@
                 </h5>
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="/Admin/AddMechanic">
+            <form method="post" action="/Admin/AddMechanic" id="mechForm" novalidate>
                 <div class="modal-body p-4">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-regular fa-user"></i> Name</label>
-                            <input type="text" name="Mech_Name" class="form-control" placeholder="Full name" required>
+                            <input type="text" name="Mech_Name" id="mechName" class="form-control" placeholder="Full name">
+                            <small class="text-danger fw-medium d-none" id="err-mechName"></small>
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-solid fa-phone"></i> Contact</label>
-                            <input type="text" name="Mech_Contact" class="form-control" placeholder="Phone number" required>
+                            <input type="text" name="Mech_Contact" id="mechContact" class="form-control" placeholder="Phone number">
+                            <small class="text-danger fw-medium d-none" id="err-mechContact"></small>
                         </div>
                         <div class="col-12">
                             <label class="custom-label"><i class="fa-solid fa-toggle-on"></i> Status</label>
@@ -98,7 +100,7 @@
                 </div>
                 <div class="modal-footer border-0 pb-4">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-animated rounded-pill px-5">
+                    <button type="button" class="btn btn-animated rounded-pill px-5" onclick="submitMechForm()">
                         <i class="fa-solid fa-check me-2"></i> Save
                     </button>
                 </div>
@@ -106,3 +108,44 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    function vErr(id, errId, msg) {
+        const el = document.getElementById(id);
+        el.style.borderColor = '#dc2626';
+        el.style.boxShadow = '0 0 0 3px rgba(220,38,38,0.12)';
+        const err = document.getElementById(errId);
+        err.textContent = msg;
+        err.classList.remove('d-none');
+    }
+    function vClear(id, errId) {
+        const el = document.getElementById(id);
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
+        document.getElementById(errId).classList.add('d-none');
+    }
+    function submitMechForm() {
+        let ok = true;
+        const name    = document.getElementById('mechName').value.trim();
+        const contact = document.getElementById('mechContact').value.trim();
+        vClear('mechName', 'err-mechName');
+        vClear('mechContact', 'err-mechContact');
+        if (!name) { vErr('mechName', 'err-mechName', 'Mechanic name is required.'); ok = false; }
+        else if (name.length < 2) { vErr('mechName', 'err-mechName', 'Name must be at least 2 characters.'); ok = false; }
+        if (!contact) { vErr('mechContact', 'err-mechContact', 'Contact number is required.'); ok = false; }
+        else if (!/^\d{7,15}$/.test(contact)) { vErr('mechContact', 'err-mechContact', 'Enter a valid number (7-15 digits).'); ok = false; }
+        if (ok) document.getElementById('mechForm').submit();
+    }
+    document.getElementById('mechName').addEventListener('input', () => vClear('mechName', 'err-mechName'));
+    document.getElementById('mechContact').addEventListener('input', () => vClear('mechContact', 'err-mechContact'));
+
+    // Reset on modal close
+    document.getElementById('addMechanicModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('mechName').value = '';
+        document.getElementById('mechContact').value = '';
+        vClear('mechName', 'err-mechName');
+        vClear('mechContact', 'err-mechContact');
+    });
+</script>
+}

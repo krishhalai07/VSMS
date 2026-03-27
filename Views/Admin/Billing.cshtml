@@ -155,7 +155,7 @@
                 </h5>
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="/Admin/AddBilling" id="billingForm">
+            <form method="post" action="/Admin/AddBilling" id="billingForm" novalidate>
                 <input type="hidden" name="partsJson" id="partsJsonInput">
                 <div class="modal-body p-4">
                     <div class="row g-3">
@@ -163,13 +163,14 @@
                         <!-- Job Card -->
                         <div class="col-12">
                             <label class="custom-label"><i class="fa-solid fa-wrench"></i> Job Card (J_id)</label>
-                            <select name="J_id" class="form-select fw-bold" required>
+                            <select name="J_id" id="bJobId" class="form-select fw-bold">
                                 <option value="" disabled selected>Select job card...</option>
                                 @foreach (var jid in jobIds)
                                 {
                                     <option value="@jid">#@jid</option>
                                 }
                             </select>
+                            <small class="text-danger fw-medium d-none" id="err-bJobId"></small>
                         </div>
 
                         <!-- Parts Section -->
@@ -191,8 +192,8 @@
                             <input type="number" name="Part_cost" id="partCost" class="form-control fw-bold bg-light" placeholder="0" readonly>
                         </div>
                         <div class="col-md-6">
-                            <label class="custom-label"><i class="fa-solid fa-percent"></i> GST Amount</label>
-                            <input type="number" name="Gst" id="gstVal" class="form-control fw-bold" placeholder="0" oninput="calcTotal()">
+                            <label class="custom-label"><i class="fa-solid fa-percent"></i> GST Amount <span class="badge bg-primary bg-opacity-10 text-primary ms-1" style="font-size:0.7rem;">16% Auto</span></label>
+                            <input type="number" name="Gst" id="gstVal" class="form-control fw-bold bg-light" placeholder="0" readonly>
                         </div>
                         <div class="col-12">
                             <label class="custom-label"><i class="fa-solid fa-calculator"></i> Total Cost</label>
@@ -221,7 +222,7 @@
                 </div>
                 <div class="modal-footer border-0 pb-4">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-animated rounded-pill px-5" onclick="buildPartsJson()">
+                    <button type="button" class="btn btn-animated rounded-pill px-5" onclick="submitBillingForm()">
                         <i class="fa-solid fa-save me-2"></i> Save Invoice
                     </button>
                 </div>
@@ -280,6 +281,9 @@
             total += parseInt(inp.value) || 0;
         });
         document.getElementById('partCost').value = total;
+        // Auto calculate 16% GST
+        const gst = Math.round(total * 0.16);
+        document.getElementById('gstVal').value = gst;
         calcTotal();
     }
 
@@ -298,6 +302,40 @@
         });
         document.getElementById('partsJsonInput').value = JSON.stringify(parts);
     }
+
+    function submitBillingForm() {
+        let ok = true;
+        const jobId = document.getElementById('bJobId').value;
+        const errJobId = document.getElementById('err-bJobId');
+        errJobId.classList.add('d-none');
+        document.getElementById('bJobId').style.borderColor = '';
+        if (!jobId) {
+            document.getElementById('bJobId').style.borderColor = '#dc2626';
+            document.getElementById('bJobId').style.boxShadow = '0 0 0 3px rgba(220,38,38,0.12)';
+            errJobId.textContent = 'Please select a job card.';
+            errJobId.classList.remove('d-none');
+            ok = false;
+        }
+        const parts = [];
+        document.querySelectorAll('.part-row').forEach(row => {
+            const name  = row.querySelector('.part-name').value.trim();
+            const price = parseInt(row.querySelector('.part-price').value) || 0;
+            if (name) parts.push({ name, price });
+        });
+        if (parts.length === 0) {
+            alert('Please add at least one part or service.'); ok = false;
+        }
+        if (ok) {
+            document.getElementById('partsJsonInput').value = JSON.stringify(parts);
+            document.getElementById('billingForm').submit();
+        }
+    }
+
+    document.getElementById('bJobId')?.addEventListener('change', function() {
+        this.style.borderColor = '';
+        this.style.boxShadow = '';
+        document.getElementById('err-bJobId').classList.add('d-none');
+    });
 
     // Add one row by default when modal opens
     document.getElementById('createInvoiceModal').addEventListener('show.bs.modal', function () {

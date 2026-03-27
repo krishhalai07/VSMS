@@ -93,7 +93,9 @@
     <div class="shape shape-3"></div>
 
     <div class="login-card">
-        <div class="login-icon"><i class="fa-solid fa-car-wrench"></i></div>
+        <div class="login-icon">
+            <img src="/logo.png" alt="VSMS" style="width:56px;height:56px;object-fit:cover;border-radius:50%;">
+        </div>
         <h3 class="text-center fw-bold mb-1">Welcome to VSMS</h3>
         <p class="text-center text-muted mb-4" style="font-size:0.9rem;">Sign in or create a new account</p>
 
@@ -175,6 +177,58 @@
             document.getElementById('panel-login').classList.toggle('active', t === 'login');
             document.getElementById('panel-reg').classList.toggle('active', t === 'register');
         }
+
+        // Validation helper
+        function showErr(input, msg) {
+            input.style.borderColor = '#dc2626';
+            input.style.boxShadow = '0 0 0 3px rgba(220,38,38,0.12)';
+            let err = input.parentElement.querySelector('.v-err');
+            if (!err) { err = document.createElement('small'); err.className = 'v-err text-danger fw-medium mt-1 d-block'; input.parentElement.appendChild(err); }
+            err.textContent = msg;
+        }
+        function clearErr(input) {
+            input.style.borderColor = '';
+            input.style.boxShadow = '';
+            const err = input.parentElement.querySelector('.v-err');
+            if (err) err.remove();
+        }
+
+        // Login form validation
+        document.querySelector('#panel-login form').addEventListener('submit', function(e) {
+            let ok = true;
+            const email = this.querySelector('[name=email]');
+            const pass  = this.querySelector('[name=password]');
+            clearErr(email); clearErr(pass);
+            if (!email.value.trim()) { showErr(email, 'Email is required.'); ok = false; }
+            else if (!/^[^@]+@[^@]+\.[^@]+$/.test(email.value)) { showErr(email, 'Enter a valid email address.'); ok = false; }
+            if (!pass.value.trim()) { showErr(pass, 'Password is required.'); ok = false; }
+            else if (pass.value.length < 4) { showErr(pass, 'Password must be at least 4 characters.'); ok = false; }
+            if (!ok) e.preventDefault();
+        });
+
+        // Register form validation
+        document.querySelector('#panel-reg form').addEventListener('submit', function(e) {
+            let ok = true;
+            const name    = this.querySelector('[name=Name]');
+            const email   = this.querySelector('[name=Email]');
+            const contact = this.querySelector('[name=Contact]');
+            const pass    = this.querySelector('[name=Pass]');
+            [name, email, contact, pass].forEach(clearErr);
+            if (!name.value.trim()) { showErr(name, 'Full name is required.'); ok = false; }
+            else if (name.value.trim().length < 2) { showErr(name, 'Name must be at least 2 characters.'); ok = false; }
+            if (!email.value.trim()) { showErr(email, 'Email is required.'); ok = false; }
+            else if (!/^[^@]+@[^@]+\.[^@]+$/.test(email.value)) { showErr(email, 'Enter a valid email address.'); ok = false; }
+            if (!contact.value.trim()) { showErr(contact, 'Contact number is required.'); ok = false; }
+            else if (!/^\d{7,15}$/.test(contact.value.trim())) { showErr(contact, 'Enter a valid contact number (7-15 digits).'); ok = false; }
+            if (!pass.value.trim()) { showErr(pass, 'Password is required.'); ok = false; }
+            else if (pass.value.length < 4) { showErr(pass, 'Password must be at least 4 characters.'); ok = false; }
+            if (!ok) e.preventDefault();
+        });
+
+        // Clear error on input
+        document.querySelectorAll('.form-control').forEach(inp => {
+            inp.addEventListener('input', () => clearErr(inp));
+        });
     </script>
 </body>
 </html>

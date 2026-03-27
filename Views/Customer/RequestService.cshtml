@@ -109,7 +109,7 @@
                         <p class="mb-0 text-white-50">Please provide accurate information for better service</p>
                     </div>
                     <div class="form-body">
-                        <form method="post" action="/Customer/RequestService" autocomplete="off">
+                        <form method="post" action="/Customer/RequestService" autocomplete="off" id="svcForm" novalidate>
 
                             <!-- Personal Information -->
                             <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-user me-2"></i>Personal Information</h5>
@@ -160,7 +160,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-submit w-100">
+                            <button type="button" class="btn btn-submit w-100" onclick="submitSvcForm()">
                                 <i class="fa-solid fa-paper-plane me-2"></i>Submit Request
                             </button>
                         </form>
@@ -198,3 +198,48 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    function vErr(input, msg) {
+        input.style.borderColor = '#dc2626';
+        input.style.boxShadow = '0 0 0 3px rgba(220,38,38,0.12)';
+        let err = input.parentElement.querySelector('.v-err');
+        if (!err) { err = document.createElement('small'); err.className = 'v-err text-danger fw-medium mt-1 d-block'; input.parentElement.appendChild(err); }
+        err.textContent = msg;
+    }
+    function vClear(input) {
+        input.style.borderColor = '';
+        input.style.boxShadow = '';
+        const err = input.parentElement.querySelector('.v-err');
+        if (err) err.remove();
+    }
+    function submitSvcForm() {
+        let ok = true;
+        const form        = document.getElementById('svcForm');
+        const ownerName   = form.querySelector('[name=Owner_Name]');
+        const ownerPhone  = form.querySelector('[name=Owner_contact]');
+        const plate       = form.querySelector('[name=NumberPlate]');
+        const carName     = form.querySelector('[name=Car_Name]');
+        const carModel    = form.querySelector('[name=Car_Model]');
+        const year        = form.querySelector('[name=Year]');
+        [ownerName, ownerPhone, plate, carName, carModel].forEach(vClear);
+        if (year) vClear(year);
+
+        if (!ownerName.value.trim()) { vErr(ownerName, 'Owner name is required.'); ok = false; }
+        if (!ownerPhone.value.trim()) { vErr(ownerPhone, 'Phone number is required.'); ok = false; }
+        else if (!/^\d{7,15}$/.test(ownerPhone.value.trim())) { vErr(ownerPhone, 'Enter a valid number (7-15 digits).'); ok = false; }
+        if (!plate.value.trim()) { vErr(plate, 'Number plate is required.'); ok = false; }
+        else if (plate.value.trim().length < 4) { vErr(plate, 'Enter a valid number plate (min 4 characters).'); ok = false; }
+        if (!carName.value.trim()) { vErr(carName, 'Car name is required.'); ok = false; }
+        if (!carModel.value.trim()) { vErr(carModel, 'Car model is required.'); ok = false; }
+        if (year && year.value && (parseInt(year.value) < 1990 || parseInt(year.value) > 2099)) {
+            vErr(year, 'Year must be between 1990 and 2099.'); ok = false;
+        }
+        if (ok) form.submit();
+    }
+    document.querySelectorAll('#svcForm input:not([readonly])').forEach(inp => {
+        inp.addEventListener('input', () => vClear(inp));
+    });
+</script>
+}

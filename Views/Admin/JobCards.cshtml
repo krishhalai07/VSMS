@@ -60,7 +60,7 @@
                                     @j.Status
                                 </button>
                                 <ul class="dropdown-menu border-0 shadow-lg p-2" style="border-radius:12px;min-width:130px;">
-                                    @foreach (var s in new[] { "Pending", "Assigned", "In Progress", "Testing", "Completed", "Delivered" })
+                                    @foreach (var s in new[] { "Received", "Assigned", "In Progress", "Testing", "Completed", "Delivered" })
                                     {
                                         var sc2 = s switch {
                                             "Completed" or "Delivered" => "success",
@@ -120,28 +120,30 @@
                 </h5>
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="/Admin/AddJobCard">
+            <form method="post" action="/Admin/AddJobCard" id="jobForm" novalidate>
                 <div class="modal-body p-4">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-solid fa-car"></i> Vehicle</label>
-                            <select name="Vech_id" class="form-select fw-bold" required>
+                            <select name="Vech_id" id="jVechId" class="form-select fw-bold">
                                 <option value="" disabled selected>Select vehicle...</option>
                                 @foreach (var v in vehicles)
                                 {
                                     <option value="@v.Vech_id">@v.Vech_id — @v.Car_Name @v.Car_Model</option>
                                 }
                             </select>
+                            <small class="text-danger fw-medium d-none" id="err-jVechId"></small>
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-solid fa-user-gear"></i> Mechanic</label>
-                            <select name="Mech_Name" class="form-select fw-bold" required>
+                            <select name="Mech_Name" id="jMechName" class="form-select fw-bold">
                                 <option value="" disabled selected>Select mechanic...</option>
                                 @foreach (var m in mechanics)
                                 {
                                     <option value="@m.Mech_Name">@m.Mech_Name</option>
                                 }
                             </select>
+                            <small class="text-danger fw-medium d-none" id="err-jMechName"></small>
                         </div>
                         <div class="col-12">
                             <label class="custom-label"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Problem / Issues</label>
@@ -186,16 +188,18 @@
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-regular fa-calendar-plus text-primary"></i> Date In</label>
-                            <input type="date" name="Date_in" class="form-control fw-bold" required>
+                            <input type="date" name="Date_in" id="jDateIn" class="form-control fw-bold">
+                            <small class="text-danger fw-medium d-none" id="err-jDateIn"></small>
                         </div>
                         <div class="col-md-6">
                             <label class="custom-label"><i class="fa-regular fa-calendar-check text-success"></i> Date Out</label>
-                            <input type="date" name="Date_out" class="form-control fw-bold">
+                            <input type="date" name="Date_out" id="jDateOut" class="form-control fw-bold">
+                            <small class="text-danger fw-medium d-none" id="err-jDateOut"></small>
                         </div>
                         <div class="col-12">
                             <label class="custom-label"><i class="fa-solid fa-bars-progress text-warning"></i> Status</label>
                             <select name="Status" class="form-select fw-bold">
-                                <option value="Pending" selected>Pending</option>
+                                <option value="Received" selected>Received</option>
                                 <option value="Assigned">Assigned</option>
                                 <option value="In Progress">In Progress</option>
                                 <option value="Testing">Testing</option>
@@ -207,7 +211,7 @@
                 </div>
                 <div class="modal-footer border-0 pb-4">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-animated rounded-pill px-5">
+                    <button type="button" class="btn btn-animated rounded-pill px-5" onclick="submitJobForm()">
                         <i class="fa-solid fa-play me-2"></i> Dispatch Job
                     </button>
                 </div>
@@ -277,6 +281,49 @@
         document.getElementById('otherProblem').value = '';
         document.getElementById('problemValue').value = '';
         document.getElementById('problemPreview').style.display = 'none';
+    });
+
+    function vErr(id, errId, msg) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.borderColor = '#dc2626';
+        el.style.boxShadow = '0 0 0 3px rgba(220,38,38,0.12)';
+        const err = document.getElementById(errId);
+        if (err) { err.textContent = msg; err.classList.remove('d-none'); }
+    }
+    function vClear(id, errId) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.borderColor = ''; el.style.boxShadow = '';
+        const err = document.getElementById(errId);
+        if (err) err.classList.add('d-none');
+    }
+    function submitJobForm() {
+        let ok = true;
+        vClear('jVechId','err-jVechId'); vClear('jMechName','err-jMechName');
+        vClear('jDateIn','err-jDateIn'); vClear('jDateOut','err-jDateOut');
+
+        if (!document.getElementById('jVechId').value) {
+            vErr('jVechId','err-jVechId','Please select a vehicle.'); ok = false;
+        }
+        if (!document.getElementById('jMechName').value) {
+            vErr('jMechName','err-jMechName','Please select a mechanic.'); ok = false;
+        }
+        if (!document.getElementById('problemValue').value.trim()) {
+            alert('Please select or describe at least one problem.'); ok = false;
+        }
+        if (!document.getElementById('jDateIn').value) {
+            vErr('jDateIn','err-jDateIn','Date In is required.'); ok = false;
+        }
+        const din  = document.getElementById('jDateIn').value;
+        const dout = document.getElementById('jDateOut').value;
+        if (din && dout && dout < din) {
+            vErr('jDateOut','err-jDateOut','Date Out cannot be before Date In.'); ok = false;
+        }
+        if (ok) document.getElementById('jobForm').submit();
+    }
+    ['jVechId','jMechName','jDateIn','jDateOut'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', () => vClear(id,'err-'+id));
     });
 </script>
 }
