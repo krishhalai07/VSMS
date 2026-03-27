@@ -9,5 +9,6 @@ namespace VSMS.Models
         public int? Total_cost { get; set; }
         public string? Status { get; set; }
         public string? Payment_type { get; set; }
+        public string? Parts_Detail { get; set; } // JSON: [{"name":"Oil Filter","price":500},...]
     }
 }

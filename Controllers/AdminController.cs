@@ -454,7 +454,16 @@ namespace VSMS.Controllers
             try
             {
                 using var conn = _db.Open();
-                using (var cmd = new SqlCommand("SELECT B_id,J_id,Part_cost,Gst,Total_cost,Status,Payment_type FROM Billing ORDER BY B_id DESC", conn))
+                // Try with Parts_Detail column
+                string sql = "SELECT B_id,J_id,Part_cost,Gst,Total_cost,Status,Payment_type,Parts_Detail FROM Billing ORDER BY B_id DESC";
+                try
+                {
+                    using var test = new SqlCommand("SELECT TOP 0 Parts_Detail FROM Billing", conn);
+                    test.ExecuteNonQuery();
+                }
+                catch { sql = "SELECT B_id,J_id,Part_cost,Gst,Total_cost,Status,Payment_type FROM Billing ORDER BY B_id DESC"; }
+
+                using (var cmd = new SqlCommand(sql, conn))
                 using (var r = cmd.ExecuteReader())
                     while (r.Read())
                         list.Add(new Billing {
@@ -464,7 +473,8 @@ namespace VSMS.Controllers
                             Gst          = r.IsDBNull(3) ? null : r.GetInt32(3),
                             Total_cost   = r.IsDBNull(4) ? null : r.GetInt32(4),
                             Status       = r.IsDBNull(5) ? "" : r.GetString(5),
-                            Payment_type = r.IsDBNull(6) ? "" : r.GetString(6)
+                            Payment_type = r.IsDBNull(6) ? "" : r.GetString(6),
+                            Parts_Detail = r.FieldCount > 7 && !r.IsDBNull(7) ? r.GetString(7) : null
                         });
 
                 using (var cmd2 = new SqlCommand("SELECT J_id FROM Job_Crad ORDER BY J_id", conn))
@@ -478,19 +488,167 @@ namespace VSMS.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBilling(Billing b)
+        public IActionResult AddBilling(Billing b, string partsJson)
         {
             if (!IsAdmin) return Guard();
             using var conn = _db.Open();
             int newId = Convert.ToInt32(Scalar(conn, "SELECT ISNULL(MAX(B_id),0)+1 FROM Billing"));
-            Exec(conn, "INSERT INTO Billing(B_id,J_id,Part_cost,Gst,Total_cost,Status,Payment_type) VALUES(@id,@j,@pc,@g,@tc,@s,@pt)",
-                ("@id", newId), ("@j", (object?)b.J_id ?? DBNull.Value),
-                ("@pc", (object?)b.Part_cost ?? DBNull.Value),
-                ("@g",  (object?)b.Gst ?? DBNull.Value),
-                ("@tc", (object?)b.Total_cost ?? DBNull.Value),
-                ("@s",  b.Status ?? "Pending"), ("@pt", b.Payment_type ?? "Cash"));
+            try
+            {
+                Exec(conn, "INSERT INTO Billing(B_id,J_id,Part_cost,Gst,Total_cost,Status,Payment_type,Parts_Detail) VALUES(@id,@j,@pc,@g,@tc,@s,@pt,@pd)",
+                    ("@id", newId), ("@j", (object?)b.J_id ?? DBNull.Value),
+                    ("@pc", (object?)b.Part_cost ?? DBNull.Value),
+                    ("@g",  (object?)b.Gst ?? DBNull.Value),
+                    ("@tc", (object?)b.Total_cost ?? DBNull.Value),
+                    ("@s",  b.Status ?? "Pending"), ("@pt", b.Payment_type ?? "Cash"),
+                    ("@pd", string.IsNullOrEmpty(partsJson) ? (object)DBNull.Value : partsJson));
+            }
+            catch
+            {
+                Exec(conn, "INSERT INTO Billing(B_id,J_id,Part_cost,Gst,Total_cost,Status,Payment_type) VALUES(@id,@j,@pc,@g,@tc,@s,@pt)",
+                    ("@id", newId), ("@j", (object?)b.J_id ?? DBNull.Value),
+                    ("@pc", (object?)b.Part_cost ?? DBNull.Value),
+                    ("@g",  (object?)b.Gst ?? DBNull.Value),
+                    ("@tc", (object?)b.Total_cost ?? DBNull.Value),
+                    ("@s",  b.Status ?? "Pending"), ("@pt", b.Payment_type ?? "Cash"));
+            }
             TempData["Toast"] = "Invoice saved.";
             return RedirectToAction("Billing");
+        }
+
+        public IActionResult DownloadInvoice(int id)
+        {
+            if (!IsAdmin) return Guard();
+            Billing? b = null;
+
+            // All detail fields
+            string ownerName = "", ownerEmail = "", ownerContact = "";
+            string carName = "", carModel = "", carYear = "", numberPlate = "";
+            string problem = "", mechName = "", dateIn = "", dateOut = "", jobStatus = "";
+
+            try
+            {
+                using var conn = _db.Open();
+
+                // Fetch billing record
+                string bSql = "SELECT B_id,J_id,Part_cost,Gst,Total_cost,Status,Payment_type,Parts_Detail FROM Billing WHERE B_id=@id";
+                try { using var t = new SqlCommand("SELECT TOP 0 Parts_Detail FROM Billing", conn); t.ExecuteNonQuery(); }
+                catch { bSql = "SELECT B_id,J_id,Part_cost,Gst,Total_cost,Status,Payment_type FROM Billing WHERE B_id=@id"; }
+
+                using (var cmd = new SqlCommand(bSql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    using var r = cmd.ExecuteReader();
+                    if (r.Read())
+                        b = new Billing {
+                            B_id         = r.GetInt32(0),
+                            J_id         = r.IsDBNull(1) ? null : r.GetInt32(1),
+                            Part_cost    = r.IsDBNull(2) ? null : r.GetInt32(2),
+                            Gst          = r.IsDBNull(3) ? null : r.GetInt32(3),
+                            Total_cost   = r.IsDBNull(4) ? null : r.GetInt32(4),
+                            Status       = r.IsDBNull(5) ? "" : r.GetString(5),
+                            Payment_type = r.IsDBNull(6) ? "" : r.GetString(6),
+                            Parts_Detail = r.FieldCount > 7 && !r.IsDBNull(7) ? r.GetString(7) : null
+                        };
+                }
+
+                if (b?.J_id != null)
+                {
+                    // Fetch ALL job card + vehicle + owner details
+                    string jSql = @"
+                        SELECT 
+                            j.J_id, j.Problem, j.Mech_Name, j.Date_in, j.Date_out, j.Status,
+                            j.Vech_id,
+                            v.Car_Name, v.Car_Model, v.Owner_Name, v.RegId, v.Year, v.Owner_contact,
+                            ISNULL(v.Owner_Email,'') as Owner_Email
+                        FROM Job_Crad j
+                        LEFT JOIN Vehical v ON j.Vech_id = v.Vech_id
+                        WHERE j.J_id = @jid";
+
+                    try
+                    {
+                        using var jcmd = new SqlCommand(jSql, conn);
+                        jcmd.Parameters.AddWithValue("@jid", b.J_id);
+                        using var jr = jcmd.ExecuteReader();
+                        if (jr.Read())
+                        {
+                            problem      = jr.IsDBNull(1)  ? "" : jr.GetString(1);
+                            mechName     = jr.IsDBNull(2)  ? "" : jr.GetString(2);
+                            dateIn       = jr.IsDBNull(3)  ? "" : jr.GetDateTime(3).ToString("dd MMM yyyy");
+                            dateOut      = jr.IsDBNull(4)  ? "" : jr.GetDateTime(4).ToString("dd MMM yyyy");
+                            jobStatus    = jr.IsDBNull(5)  ? "" : jr.GetString(5);
+
+                            var rawCar   = jr.IsDBNull(7)  ? "" : jr.GetString(7);
+                            var rawReg   = jr.IsDBNull(10) ? "" : jr.GetValue(10).ToString()!;
+                            carName      = rawCar;
+                            numberPlate  = rawReg;
+                            if (rawCar.Contains('|')) { var p = rawCar.Split('|', 2); carName = p[0].Trim(); numberPlate = p[1].Trim(); }
+
+                            carModel     = jr.IsDBNull(8)  ? "" : jr.GetString(8);
+                            ownerName    = jr.IsDBNull(9)  ? "" : jr.GetString(9);
+                            carYear      = jr.IsDBNull(11) ? "" : jr.GetInt32(11).ToString();
+                            ownerContact = jr.IsDBNull(12) ? "" : jr.GetValue(12).ToString()!;
+                            ownerEmail   = jr.IsDBNull(13) ? "" : jr.GetString(13);
+                        }
+                    }
+                    catch
+                    {
+                        // Fallback without Owner_Email column
+                        using var jcmd2 = new SqlCommand(@"
+                            SELECT 
+                                j.J_id, j.Problem, j.Mech_Name, j.Date_in, j.Date_out, j.Status,
+                                j.Vech_id,
+                                v.Car_Name, v.Car_Model, v.Owner_Name, v.RegId, v.Year, v.Owner_contact
+                            FROM Job_Crad j
+                            LEFT JOIN Vehical v ON j.Vech_id = v.Vech_id
+                            WHERE j.J_id = @jid2", conn);
+                        jcmd2.Parameters.AddWithValue("@jid2", b.J_id);
+                        using var jr2 = jcmd2.ExecuteReader();
+                        if (jr2.Read())
+                        {
+                            problem      = jr2.IsDBNull(1)  ? "" : jr2.GetString(1);
+                            mechName     = jr2.IsDBNull(2)  ? "" : jr2.GetString(2);
+                            dateIn       = jr2.IsDBNull(3)  ? "" : jr2.GetDateTime(3).ToString("dd MMM yyyy");
+                            dateOut      = jr2.IsDBNull(4)  ? "" : jr2.GetDateTime(4).ToString("dd MMM yyyy");
+                            jobStatus    = jr2.IsDBNull(5)  ? "" : jr2.GetString(5);
+                            var rawCar   = jr2.IsDBNull(7)  ? "" : jr2.GetString(7);
+                            var rawReg   = jr2.IsDBNull(10) ? "" : jr2.GetValue(10).ToString()!;
+                            carName      = rawCar; numberPlate = rawReg;
+                            if (rawCar.Contains('|')) { var p = rawCar.Split('|', 2); carName = p[0].Trim(); numberPlate = p[1].Trim(); }
+                            carModel     = jr2.IsDBNull(8)  ? "" : jr2.GetString(8);
+                            ownerName    = jr2.IsDBNull(9)  ? "" : jr2.GetString(9);
+                            carYear      = jr2.IsDBNull(11) ? "" : jr2.GetInt32(11).ToString();
+                            ownerContact = jr2.IsDBNull(12) ? "" : jr2.GetValue(12).ToString()!;
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            if (b == null) return NotFound();
+
+            // Parse parts
+            var parts = new List<(string Name, int Price)>();
+            if (!string.IsNullOrEmpty(b.Parts_Detail))
+            {
+                try
+                {
+                    var arr = System.Text.Json.JsonSerializer.Deserialize<List<System.Text.Json.JsonElement>>(b.Parts_Detail);
+                    if (arr != null)
+                        foreach (var el in arr)
+                            parts.Add((el.GetProperty("name").GetString() ?? "", el.GetProperty("price").GetInt32()));
+                }
+                catch { }
+            }
+
+            var bytes = InvoicePdf.Generate(
+                b.B_id, b.J_id, b.Part_cost, b.Gst, b.Total_cost,
+                b.Status, b.Payment_type,
+                ownerName, ownerEmail, ownerContact,
+                carName, carModel, carYear, numberPlate,
+                problem, mechName, dateIn, dateOut, jobStatus,
+                parts);
+            return File(bytes, "application/pdf", $"Invoice_VSMS_{b.B_id}.pdf");
         }
 
         [HttpPost]
@@ -500,6 +658,16 @@ namespace VSMS.Controllers
             using var conn = _db.Open();
             Exec(conn, "DELETE FROM Billing WHERE B_id=@id", ("@id", id));
             TempData["Toast"] = "Billing record deleted.";
+            return RedirectToAction("Billing");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateBillingStatus(int id, string status)
+        {
+            if (!IsAdmin) return Guard();
+            using var conn = _db.Open();
+            Exec(conn, "UPDATE Billing SET Status=@s WHERE B_id=@id", ("@s", status), ("@id", id));
+            TempData["Toast"] = $"Invoice #{id} marked as {status}.";
             return RedirectToAction("Billing");
         }
 
